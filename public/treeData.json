@@ -1,0 +1,14 @@
+{
+  "name": "Top Level",
+  "parent": "null",
+  "children": [
+    {
+      "name": "Level 2: A",
+      "parent": "Top Level"
+    },
+    {
+      "name": "Level 2: B",
+      "parent": "Top Level"
+    }
+  ]
+}

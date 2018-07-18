@@ -1,0 +1,417 @@
+@extends('layout.peneliti')
+@section('title', 'penggunaan dana')
+@section('styles')
+<link rel="stylesheet" type="text/css" href="{{URL::asset('css/table.css')}}">
+@endsection
+@section('content')
+<div class="container">
+<ol class="breadcrumb" style="font-size: 20px">
+	<li><a href="/"></i> Beranda</a></li>
+	<li class="active">Daftar Pengajuan Dana Kegiatan</li>
+</ol>
+	@if($trans_proyeks!=null)
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="container-fluid">
+				<div class="panel-body">
+					{{-- pc --}}
+					<h2 class="hidden-xs" style="color: #448aff;text-align: center;"> Pengajuan Penggunaan Dana </h2>
+					<h3 class="hidden-xs" style="color: #808080;text-align: center">{{$kegiatan_tp->kegiatan->nama_kegiatan}}</h3>
+					{{-- mobile --}}
+					<h3 class="visible-xs" style="color: #448aff;text-align: center;"> Pengajuan Penggunaan Dana </h3>
+					<h4 class="visible-xs" style="color: #808080;text-align: center">{{$kegiatan_tp->kegiatan->nama_kegiatan}}</h4>
+					<hr>
+					<div class="table-responsive">
+					<table class="table table-striped">
+						<br>
+						@if($status=="available")
+							<a class="btn-top" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}" class="btn btn-primary btn-success pull-right" > <span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</a>
+						@else
+							<button class="btn btn-primary" disabled> <span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</button>
+						@endif
+						<br>
+						<br>
+						<thead>
+							<tr class="row-name">
+								<th>Tanggal</th>
+								<th>Jumlah Barang</th>
+								<th>Unit Jumlah</th>
+								<th>Perkiraan Biaya</th>
+								<th>Subtotal</th>
+								<th>Keterangan</th>
+								<th>Status</th>
+								<th>Edit/Hapus</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($trans_proyeks as $trans_proyek)
+							<tr class="row-content">
+								<td> <h4>{{$trans_proyek->transaksi->tanggal}} </h4></td>
+								<td style="text-align: center"><h4>{{$trans_proyek->jumlah}}</h4></td>
+								<td style="text-align: center"><h4>{{$trans_proyek->unit}}</h4></td>
+								<td style="text-align: center"><h4>{{$trans_proyek->perkiraan_biaya}}</h4></td>
+								<td><h4>{{$trans_proyek->transaksi->nominal}}</h4></td>
+								<td><h4>{{$trans_proyek->keterangan}}</h4></td>
+								@if($trans_proyek->transaksi->status == 3)
+									<td><h4><span class="label label-warning">Menunggu</span></h4></td>
+									<td>		
+									<form class="form-inline" method="POST" action="{{url('/hapusPengajuan/'.$trans_proyek->transaksi->id)}}" enctype="multipart/form-data">
+									<div class="form-group">
+										<button class="btn btn-info edit" data-toggle="modal" data-target="#editpengajuan" data-id="{{$trans_proyek->transaksi->id}}" type="button">
+										<i class="fa fa-pencil-square-o"></i>
+									</button>
+									<input type="hidden" name="_method" value="DELETE"/>
+									<button class="btn btn-danger edit" id="delete" data-id="{{$trans_proyek->transaksi->id}}" data-name="{{$trans_proyek->transaksi->keterangan}}" type="submit">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</button>
+									</div>
+									{{csrf_field()}}
+									</form>
+								</td>
+								@elseif($trans_proyek->transaksi->status == 1)
+									<td><h4><span class="label label-success">Selesai</span></h4></td>
+									<td>					
+									<div class="form-group">
+										<button class="btn btn-info edit" data-toggle="modal" data-target="#editpengajuan" type="button" disabled>
+										<i class="fa fa-pencil-square-o"></i>
+										</button>
+										<input type="hidden" name="_method" value="DELETE"/>
+										<button class="btn btn-danger edit" id="delete" type="submit" disabled>
+											<i class="fa fa-trash" aria-hidden="true"></i>
+										</button>
+									</div>
+
+								</td>
+								@endif
+								{{ $trans_proyeks->links() }}
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	@else
+	<div class="row" style="text-align: center">
+		<div class="hidden-xs">
+			<img src="{{asset('img/signature.svg')}}" style="width: 200px; height: 200px; margin-top: 100px">
+			<h2>Belum ada pengajuan penggunaan dana</h2>
+		</div>
+		<div class="visible-xs">
+			<img src="{{asset('img/signature.svg')}}" style="width: 150px; height: 150px">
+			<h4>Belum ada pengajuan penggunaan dana</h4>
+		</div>
+	</div>
+	@endif
+</div>
+
+<!-- Modal Tambah Pengajuan-->
+<div class="modal fade" id="tambahpengajuan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Form Pengajuan Dana</b>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+        </h3>
+      </div>
+      <div class="modal-body">
+       	<form method="POST" action="{{url('/tambahPengajuan')}}">
+			{{csrf_field()}}
+			
+			<input type="text" name="id_kegiatan" id="id_kegiatan" value="{{$id_kegiatan}}" hidden>
+				<div class="form-group">
+					<label for="exampleInputEmail1">Tanggal Pengajuan</label>
+					<input type="date" class="form-control" id="" name="tanggal" required>
+				</div>
+				<table id="data_table" class="table-responsive">
+					<thead>
+						<tr>
+							<th>jumlah</th>
+							<th>Unit jumlah</th>
+							<th>Perkiraan biaya</th>
+							<th>Subtotal</th>
+							<th>Keterangan</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input type="text" class="form-control" id="jumlah" name="jumlah" oninput="subtotals(0)">
+								<span id="alertjumlah" style="color: red"></span>
+							</td>
+							<td>
+								<input type="text" class="form-control" id="unit" name="unit" placeholder="ex : kg, ml, lusin">
+							</td>
+							<td>
+								<input type="text" class="form-control" id="nominal" name="nominal" oninput="subtotals(0)" required>
+								<span id="alertnominal" style="color: red"></span>
+							</td>
+							<td>
+								<input type="text" class="form-control" id="subtotal" name="subtotal" readonly>
+							</td>
+							<td>
+								<input type="text" class="form-control" id="" name="keterangan" required>
+							</td>
+							<td>
+								<button class="btn btn-danger" onclick="myDeleteFunction(this)">delete</button>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="4">
+								<button class="btn btn-primary" onclick=" myCreateFunction()">tambah</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="simpanpengajuan" type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Pengajuan-->
+<div class="modal fade" id="editpengajuan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Ubah Pengajuan Dana</b>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+		        </h3>
+			</div>
+			<div class="modal-body">
+				<form method="POST" action="{{url('/editpengajuan')}}">
+					{{csrf_field()}}
+					<input type="text" name="id_transaksi" id="id_transaksi" value="" hidden>
+               		<span id="count" value="0"></span>
+               		<input name="_method" type="hidden" value="PUT">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Tanggal Pengajuan</label>
+						<input type="date" class="form-control" id="tanggal" name="tanggal" required>
+					</div>
+					<input type="" name="countrow" hidden>
+					<div class="row" style="margin-left: -15px">
+						<div class="col-md-6 col-xs-6 form-group">
+							<label for="exampleInputEmail1">Jumlah Barang</label>
+							<input type="text" class="form-control" id="jumlahs" name="jumlah" oninput="subtotals2()">
+							<span id="alertjumlahs" style="color: red"></span>
+						</div>
+						<div class="col-md-6 col-xs-6">
+							<label for="exampleInputEmail1">Unit Jumlah</label>
+							<input type="text" class="form-control" id="unit" name="unit" placeholder="ex : kg, ml, lusin">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Perkiraan biaya</label>
+						<input type="text" class="form-control" id="nominals" name="nominal" oninput="subtotals2()" required>
+						<span id="alertnominal" style="color: red"></span>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Sub Total</label>
+						<input type="text" class="form-control" id="subtotals" name="subtotal" readonly>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Keterangan</label>
+						<input type="text" class="form-control" id="keterangan" name="keterangan" required>
+					</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="submit2" class="btn btn-primary">Save changes</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var t = $('#data_table').DataTable({
+      'paging'      : false,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : false,
+      'info'        : false,
+      'autoWidth'   : false
+    })
+
+	
+  function myCreateFunction() {
+      var table = document.getElementById("data_table");
+      var row = table.insertRow(1);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+      var cell5 = row.insertCell(4);
+      var cell6 = row.insertCell(5);
+
+  		let count = table.rows.length - 2
+
+      cell1.innerHTML = '<input type="text" class="form-control" id="jumlah'+count+'" name="jumlah'+count+'" oninput="subtotals('+count+')"><span id="alertjumlah'+count+'" style="color: red"></span>';
+      cell2.innerHTML = '<input type="text" class="form-control" id="unit'+count+'" name="unit'+count+'" placeholder="ex : kg, ml, lusin">';
+      cell3.innerHTML = '<input type="text" class="form-control" id="nominal'+count+'" name="nominal" oninput="subtotals('+count+')" required><span id="alertnominal'+count+'" style="color: red"></span>';
+      cell4.innerHTML = '<input type="text" class="form-control" id="subtotal'+count+'" name="subtotal" readonly>';
+      cell5.innerHTML = '<input type="text" class="form-control" id="keterangan'+count+'" name="keterangan" required>';
+      cell6.innerHTML = '<button class="btn btn-danger" onclick="myDeleteFunction(this)">delete</button>';
+
+      console.log(count)
+
+  }
+
+  function myDeleteFunction(self) {
+    // console.log($(self).closest("tr").index())
+      document.getElementById("data_table").deleteRow($(self).closest("tr").index()+1);
+  }
+
+	function subtotals(count){
+		var jumlah = 'jumlah'
+		var alertjumlah = 'alertjumlah'
+		var nominal = 'nominal'
+		var alertnominal = 'alertnominal'
+		var subtotal = 'subtotal'
+		if(count != 0){
+			jumlah = jumlah + count
+			alertjumlah = alertjumlah + count
+			nominal = nominal + count
+			alertnominal = alertnominal +count
+			subtotal = subtotal +count
+		}
+		if(document.getElementById(jumlah).value!="" && document.getElementById(nominal).value!=""){
+			document.getElementById(subtotal).value=document.getElementById(jumlah).value*document.getElementById(nominal).value;
+		}
+		else if(document.getElementById(jumlah).value==""){
+			document.getElementById(subtotal).value=document.getElementById(nominal).value;
+		}
+
+		if(document.getElementById(nominal).value!="" && document.getElementById(nominal).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById(nominal).value!="" && document.getElementById(nominal).value == ""){
+			document.getElementById(alertnominal).innerHTML = "Isi dengan angka";
+			document.getElementById(subtotal).value="";
+			// document.getElementById("simpanpengajuan").setAttribute("disabled","disabled");
+		}
+		else{
+			document.getElementById(alertnominal).innerHTML = "";
+		}
+
+		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+			document.getElementById(alertjumlah).innerHTML = "Isi dengan angka";
+			document.getElementById(subtotal).value="";
+			// document.getElementById("simpanpengajuan").setAttribute("disabled","disabled");
+		}
+		else{
+			document.getElementById(alertjumlah).innerHTML = "";
+		}
+
+		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value == ""){
+			document.getElementById(subtotal).value=document.getElementById(nominal).value;
+		}
+
+	}
+
+	function subtotals2(){
+		if(document.getElementById("jumlahs").value!="" && document.getElementById("nominals").value!=""){
+			document.getElementById("subtotals").value=document.getElementById("jumlahs").value*document.getElementById("nominals").value;
+		}
+		else if(document.getElementById("jumlahs").value==""){
+			document.getElementById("subtotals").value=document.getElementById("nominals").value;
+		}
+
+		if(document.getElementById("nominals").value!="" && document.getElementById("nominals").value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById("nominals").value!="" && document.getElementById("nominals").value == ""){
+			document.getElementById("alertnominals").innerHTML = "Isi dengan angka";
+			document.getElementById("subtotals").value="";
+		}
+		else{
+			document.getElementById("alertnominals").innerHTML = "";
+		}
+
+		if(document.getElementById("jumlas").value!="" && document.getElementById("jumlahs").value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+			document.getElementById("alertjumlahs").innerHTML = "Isi dengan angka";
+			document.getElementById("subtotals").value="";
+		}
+		else{
+			document.getElementById("alertjumlahs").innerHTML = "";
+		}
+
+		if(document.getElementById("jumlahs").value!="" && document.getElementById("jumlahs").value == ""){
+			document.getElementById("subtotals").value=document.getElementById("nominals").value;
+		}
+
+	}
+
+</script>
+
+
+@endsection
+
+@section('script')
+<script type="text/javascript">
+$('button#delete').on('click',function(e){
+    e.preventDefault();
+    var form = $(this).parents('form');
+    var nama = $(e.currentTarget).attr('data-name');
+    var tabel = $(e.currentTarget).attr('data-table');
+    swal({
+      title: 'Hapus',
+      text: "Apakah anda yakin akan menghapus pengajuan "+nama+" ? ",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
+      confirmButtonClass: 'btn btn-success',
+      cancelButtonClass: 'btn btn-danger',
+      buttonsStyling: false
+    },
+    function (isConfirm) {
+        if(isConfirm) form.submit();
+    });
+  });
+</script>
+
+
+
+<script type="text/javascript">
+  $('#editpengajuan').on('show.bs.modal', function(event) {
+        var link = $(event.relatedTarget);
+        var id = link.data('id');
+        var modal = $(this);
+        modal.find('#id_transaksi').val(id);
+        modal.find('#tanggal').val("");
+        modal.find('#jumlahs').val("");
+        modal.find('#nominals').val("");
+        modal.find('#subtotals').val("");
+        modal.find('#unit').val("");
+        modal.find('#keterangan').val("");
+        
+        $.ajax({
+          url : 'http://'+ window.location.host +'/geteditdana/' + id,
+          type: "GET",
+          dataType: "json",
+          success:function(data) {
+          	modal.find('#tanggal').val(data.tanggal);
+          	modal.find('#jumlahs').val(data.jumlah);
+          	modal.find('#nominals').val(data.perkiraan_biaya);
+          	modal.find('#subtotals').val(data.nominal);
+          	modal.find('#unit').val(data.unit);
+            modal.find('#keterangan').val(data.keterangan);
+          },
+          error: function (request, status, error) {
+		    alert(this.url);
+		  }
+        });
+  });
+</script>
+
+
+@endsection

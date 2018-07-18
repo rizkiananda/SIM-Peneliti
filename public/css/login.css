@@ -1,0 +1,67 @@
+
+
+.login{
+   font-family: 'Josefin Sans', sans-serif;
+   background: #fbfbfb; 
+   padding:40px 0px;
+}
+
+label{
+    font-weight:400;
+    font-size:15px;
+}
+ 
+.login-box{
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.24);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.24);
+    box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.24);
+    padding:0px;
+    background-repeat: no-repeat;
+}
+
+.right-box{
+	background:#FFF;
+	min-height:520px;
+}
+
+.right-box h1{
+	font-weight:600;
+    font-family: 'Josefin Sans', sans-serif;
+    color:#444;
+    padding:20px 0px;
+    text-align:center;
+}
+	
+.form{
+    padding:20px 30px;
+}
+
+.form-control {
+    box-shadow: none;
+    outline: 0;
+    border-radius:0;
+    color: #565656;
+    font-size:14px;
+    padding:20px 10px;
+    margin-bottom:30px;
+    border: 1px solid #f2f2f2;
+    background: #f2f2f2;
+}
+
+
+.btn{ 
+    background: #fc4a48;
+    border: none;
+    border-radius: 0;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 30px;
+    text-transform: uppercase;
+    width:100%;
+}
+
+.btn:hover{
+    border:2px solid #fc4a48;
+    background:#FFF;
+}
