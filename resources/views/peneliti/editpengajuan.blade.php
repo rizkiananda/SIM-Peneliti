@@ -83,11 +83,13 @@
 
 								</td>
 								@endif
-								{{ $trans_proyeks->links() }}
+								
 							</tr>
 							@endforeach
 						</tbody>
+
 					</table>
+					{{ $trans_proyeks->links() }}
 					</div>
 				</div>
 			</div>
@@ -99,6 +101,12 @@
 		<div class="hidden-xs">
 			<img src="{{asset('img/signature.svg')}}" style="width: 200px; height: 200px; margin-top: 100px">
 			<h2>Belum ada pengajuan penggunaan dana</h2>
+			@if($status=="available")
+				<a class="btn btn-primary" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}" class="btn btn-primary btn-success pull-right" > <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></a>
+			@else
+				{{-- <button class="btn btn-primary" disabled> <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></button> --}}
+				<div class="alert alert-danger" role="alert">Waktu kegiatan telah berakhir</div>
+			@endif
 		</div>
 		<div class="visible-xs">
 			<img src="{{asset('img/signature.svg')}}" style="width: 150px; height: 150px">
@@ -108,77 +116,6 @@
 	@endif
 </div>
 
-<!-- Modal Tambah Pengajuan-->
-<div class="modal fade" id="tambahpengajuan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Form Pengajuan Dana</b>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
-        </h3>
-      </div>
-      <div class="modal-body">
-       	<form method="POST" action="{{url('/tambahPengajuan')}}">
-			{{csrf_field()}}
-			
-			<input type="text" name="id_kegiatan" id="id_kegiatan" value="{{$id_kegiatan}}" hidden>
-				<div class="form-group">
-					<label for="exampleInputEmail1">Tanggal Pengajuan</label>
-					<input type="date" class="form-control" id="" name="tanggal" required>
-				</div>
-				<table id="data_table" class="table-responsive">
-					<thead>
-						<tr>
-							<th>jumlah</th>
-							<th>Unit jumlah</th>
-							<th>Perkiraan biaya</th>
-							<th>Subtotal</th>
-							<th>Keterangan</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="jumlah" name="jumlah" oninput="subtotals(0)">
-								<span id="alertjumlah" style="color: red"></span>
-							</td>
-							<td>
-								<input type="text" class="form-control" id="unit" name="unit" placeholder="ex : kg, ml, lusin">
-							</td>
-							<td>
-								<input type="text" class="form-control" id="nominal" name="nominal" oninput="subtotals(0)" required>
-								<span id="alertnominal" style="color: red"></span>
-							</td>
-							<td>
-								<input type="text" class="form-control" id="subtotal" name="subtotal" readonly>
-							</td>
-							<td>
-								<input type="text" class="form-control" id="" name="keterangan" required>
-							</td>
-							<td>
-								<button class="btn btn-danger" onclick="myDeleteFunction(this)">delete</button>
-							</td>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="4">
-								<button class="btn btn-primary" onclick=" myCreateFunction()">tambah</button>
-							</td>
-						</tr>
-					</tfoot>
-				</table>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button id="simpanpengajuan" type="submit" class="btn btn-primary">Save changes</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Modal Edit Pengajuan-->
 <div class="modal fade" id="editpengajuan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

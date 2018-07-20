@@ -54,30 +54,28 @@ class DanaController extends Controller
 
     public function mengajukanDana(Request $request){
     	$id_kegiatan = $request['id_kegiatan'];
-    	$tanggal = $request['tanggal'];
-        $jumlah = $request['jumlah'];
-        $nominal = $request['nominal'];
-        $subtotal = $request['subtotal'];
-        $unit = $request['unit'];
-    	$keterangan = $request['keterangan'];	
-    	$id_pegawai = auth::user()->id_pegawai;
+    	$tanggal = $request['tanggal']; 
+        $id_pegawai = auth::user()->id_pegawai;
 
-    	$transaksi = transaksi::create([
-    		'id_pegawai' => $id_pegawai,
-    		'tanggal' => $tanggal,
-            'nominal'=>$subtotal,
-    		'status' => 3
-    	]);
+        foreach ($request->keterangan as $index => $ket) {
+            $transaksi = transaksi::create([
+                'id_pegawai' => $id_pegawai,
+                'tanggal' => $tanggal,
+                'nominal'=> $request->subtotal[$index],
+                'status' => 3
+            ]);
 
-    	transaksi_proyek::create([
-    		'id_kegiatan' => $id_kegiatan,
-    		'id_transaksi' => $transaksi->id,
-            'jumlah' => $jumlah,
-            'perkiraan_biaya'=>$nominal,
-            'unit'=>$unit,
-            'keterangan' => $keterangan
-
-    	]);
+            transaksi_proyek::create([
+                'id_kegiatan' => $id_kegiatan,
+                'id_transaksi' => $transaksi->id,
+                'jumlah' => $request->jumlah[$index],
+                'perkiraan_biaya'=>$request->nominal[$index],
+                'unit'=>$request->unit[$index],
+                'keterangan' => $request->keterangan[$index]
+            ]);
+        }
+        
+    	
 
     	$notification = array('title'=> 'Berhasil!','msg'=>'Penggunaan dana berhasil diajukan!','alert-type'=>'success');
 		return redirect('/getDana/'.$id_kegiatan)->with($notification);

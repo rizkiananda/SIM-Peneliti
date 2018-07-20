@@ -19,7 +19,7 @@
 						<h3 class="hidden-xs" style="color: #808080;text-align: center">{{$kegiatan->nama_kegiatan}}</h3>
 					</div>
 					<hr>
-					<form method="POST" action="{{url('/tambahPengajuan')}}">
+					<form method="POST" action="{{url('/mengajukanDana')}}">
 						<input type="text" name="id_kegiatan" id="id_kegiatan" value="{{$kegiatan->id}}" hidden>
 							<div class="row">
 								<div class="col-md-4">
@@ -44,21 +44,21 @@
 								<tbody>
 									<tr>
 										<td>
-											<input type="text" class="form-control" id="keterangan" name="keterangan" required>
+											<input type="text" class="form-control" id="keterangan" name="keterangan[]" required>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="jumlah" name="jumlah" oninput="subtotals(0)">
+											<input type="text" class="form-control" id="jumlah" name="jumlah[]" oninput="subtotals(0)">
 											<span id="alertjumlah" style="color: red"></span>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="unit" name="unit" placeholder="ex : kg, ml, lusin, dll">
+											<input type="text" class="form-control" id="unit" name="unit[]" placeholder="ex : kg, ml, lusin, dll">
 										</td>
 										<td>
-											<input type="text" class="form-control" id="nominal" name="nominal" oninput="subtotals(0)" required>
+											<input type="text" class="form-control" id="nominal" name="nominal[]" oninput="subtotals(0)" required>
 											<span id="alertnominal" style="color: red"></span>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="subtotal" name="subtotal" readonly>
+											<input type="text" class="form-control" id="subtotal" name="subtotal[]" readonly>
 										</td>
 										<td>
 											<button class="btn btn-danger" onclick="myDeleteFunction(this)"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -108,12 +108,12 @@
 
   		let count = table.rows.length - 2
 
-      cell1.innerHTML = '<input type="text" class="form-control" id="keterangan'+count+'" name="keterangan" required><br>';
-      cell2.innerHTML = '<input type="text" class="form-control" id="jumlah'+count+'" name="jumlah'+count+'" oninput="subtotals('+count+')"><span id="alertjumlah'+count+'" style="color: red"></span><br>';
-      cell3.innerHTML =  '<input type="text" class="form-control" id="unit'+count+'" name="unit'+count+'" placeholder="ex : kg, ml, lusin"><br>'; 
-      cell4.innerHTML = '<input type="text" class="form-control" id="nominal'+count+'" name="nominal" oninput="subtotals('+count+')" required><span id="alertnominal'+count+'" style="color: red"></span><br>'; 
-      cell5.innerHTML =  '<input type="text" class="form-control" id="subtotal'+count+'" name="subtotal" readonly><br>';
-      cell6.innerHTML = '<button class="btn btn-danger" onclick="myDeleteFunction(this)"><i class="fas fa-trash-alt"></i>Delete</button><br><br><br>';
+      cell1.innerHTML = '<input type="text" class="form-control" id="keterangan'+count+'" name="keterangan[]" required><br>';
+      cell2.innerHTML = '<input type="text" class="form-control" id="jumlah'+count+'" name="jumlah[]" oninput="subtotals('+count+')"><span id="alertjumlah'+count+'" style="color: red"></span><br>';
+      cell3.innerHTML =  '<input type="text" class="form-control" id="unit'+count+'" name="unit[]" placeholder="ex : kg, ml, lusin"><br>'; 
+      cell4.innerHTML = '<input type="text" class="form-control" id="nominal'+count+'" name="nominal[]" oninput="subtotals('+count+')" required><span id="alertnominal'+count+'" style="color: red"></span><br>'; 
+      cell5.innerHTML =  '<input type="text" class="form-control" id="subtotal'+count+'" name="subtotal[]" readonly><br>';
+      cell6.innerHTML = '<button class="btn btn-danger" onclick="myDeleteFunction(this)"><i class="fas fa-trash-alt"></i> Delete</button><br><br><br>';
 
       console.log(count)
 
@@ -134,8 +134,8 @@
 			jumlah = jumlah + count
 			alertjumlah = alertjumlah + count
 			nominal = nominal + count
-			alertnominal = alertnominal +count
-			subtotal = subtotal +count
+			alertnominal = alertnominal + count
+			subtotal = subtotal + count
 		}
 		if(document.getElementById(jumlah).value!="" && document.getElementById(nominal).value!=""){
 			document.getElementById(subtotal).value=document.getElementById(jumlah).value*document.getElementById(nominal).value;
@@ -164,36 +164,6 @@
 
 		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value == ""){
 			document.getElementById(subtotal).value=document.getElementById(nominal).value;
-		}
-
-	}
-
-	function subtotals2(){
-		if(document.getElementById("jumlahs").value!="" && document.getElementById("nominals").value!=""){
-			document.getElementById("subtotals").value=document.getElementById("jumlahs").value*document.getElementById("nominals").value;
-		}
-		else if(document.getElementById("jumlahs").value==""){
-			document.getElementById("subtotals").value=document.getElementById("nominals").value;
-		}
-
-		if(document.getElementById("nominals").value!="" && document.getElementById("nominals").value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById("nominals").value!="" && document.getElementById("nominals").value == ""){
-			document.getElementById("alertnominals").innerHTML = "Isi dengan angka";
-			document.getElementById("subtotals").value="";
-		}
-		else{
-			document.getElementById("alertnominals").innerHTML = "";
-		}
-
-		if(document.getElementById("jumlas").value!="" && document.getElementById("jumlahs").value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
-			document.getElementById("alertjumlahs").innerHTML = "Isi dengan angka";
-			document.getElementById("subtotals").value="";
-		}
-		else{
-			document.getElementById("alertjumlahs").innerHTML = "";
-		}
-
-		if(document.getElementById("jumlahs").value!="" && document.getElementById("jumlahs").value == ""){
-			document.getElementById("subtotals").value=document.getElementById("nominals").value;
 		}
 
 	}

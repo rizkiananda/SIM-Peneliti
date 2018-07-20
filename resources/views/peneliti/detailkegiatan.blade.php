@@ -24,9 +24,9 @@
 		<div class="col-md-2">
 			<h4><b>Judul Penelitian</b></h4>
 		</div>
-		@if($kegiatan->judul!=null)
+		@if($berkas!=null)
 		<div class="col-md-10">
-			<h4>{{$kegiatan->judul}}</h4>
+			<h4>{{$berkas->judul}}</h4>
 		</div>
 		@else
 		<div class="col-md-10">

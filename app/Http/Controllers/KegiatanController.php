@@ -60,19 +60,19 @@ class KegiatanController extends Controller
     	$id_pegawai = auth::user()->id_pegawai;
         $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
         $id_peneliti = $peneliti_psb->id_peneliti;
-        $kegiatan = kegiatan::join('tipe_kegiatan', 'tipe_kegiatan.id', '=', 'kegiatan.id_tipe_kegiatan')
-        ->join('berkas', 'berkas.id_kegiatan', '=', 'kegiatan.id')
-        ->where('kegiatan.id', $id)
-        ->select('kegiatan.nama_kegiatan', 'kegiatan.tanggal_awal','kegiatan.tanggal_akhir', 'tipe_kegiatan.nama_tipe_kegiatan', 'berkas.judul','kegiatan.lokasi')
-        ->first();
+        $berkas = berkas::where('id_kegiatan',$id)->first();
 
+        $kegiatan = kegiatan::join('tipe_kegiatan', 'tipe_kegiatan.id', '=', 'kegiatan.id_tipe_kegiatan')
+        ->where('kegiatan.id', $id)
+        ->select('kegiatan.nama_kegiatan', 'kegiatan.tanggal_awal','kegiatan.tanggal_akhir', 'tipe_kegiatan.nama_tipe_kegiatan','kegiatan.lokasi')
+        ->first();
           $penelitis=peserta_kegiatan::with(['peneliti'=>function($k){
             $k->with(['peneliti_psb'=>function($q){
               $q->with(['pegawai']);
             }])->with(['peneliti_nonpsb']);
           }])->where('id_kegiatan',$id)->get();
 
-        return view('peneliti.detailKegiatan', ['kegiatan'=>$kegiatan, 'penelitis'=>$penelitis]);
+        return view('peneliti.detailKegiatan', ['kegiatan'=>$kegiatan, 'penelitis'=>$penelitis, 'berkas'=>$berkas]);
     }
 
 
@@ -84,7 +84,7 @@ class KegiatanController extends Controller
    		$tipekegiatans = tipe_kegiatan::all();
         $kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
         			->where('id_peneliti', $id_peneliti)
-        			->where('nama_kegiatan','LIKE','%'.$keywords.'%')->get();
+        			->where('nama_kegiatan','LIKE','%'.$keywords.'%')->paginate(5);
 
         return view('peneliti.dashboard', ['kegiatans' => $kegiatans,'tipekegiatans'=>$tipekegiatans]);
     }
@@ -95,16 +95,49 @@ class KegiatanController extends Controller
     	$id_pegawai = auth::user()->id_pegawai;
    		$peneliti_psb = peneliti_psb::where('id_pegawai', $id_pegawai)->first();
    		$id_peneliti = $peneliti_psb->id_peneliti;
+   		$pesertas = peserta_kegiatan::where([['status_konfirm', 'setuju'],['id_peneliti',$id_peneliti]])->get();
+   		$countpeserta = $pesertas->count();
     	if($filter=="all"){
-        	$kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
-        			->where('id_peneliti', $id_peneliti)->get();
-        	return view('peneliti.dashboard', ['kegiatans' => $kegiatans, 'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
+        	if($countpeserta==0){
+        	$entries = null;
+	        }
+	        else {
+	        	foreach ($pesertas as $peserta) {
+	        		$kegiatans[] = $peserta->kegiatan;
+	        		$tanggal[] = strtotime($peserta->kegiatan->tanggal_awal);
+	        	}
+	        	array_multisort($tanggal, SORT_DESC, $kegiatans);
+		        	$currentPage = LengthAwarePaginator::resolveCurrentPage();
+		        	$col = new Collection($kegiatans);
+		        	$perPage = 5;
+		        	$currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
+		        	$entries = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
+	        }
+        	return view('peneliti.dashboard', ['kegiatans' => $entries, 'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
         }
         else{
-			$kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
-			->where('id_peneliti', $id_peneliti)
-			->where('id_tipe_kegiatan', $filter)->get();
-        	return view('peneliti.dashboard', ['kegiatans' => $kegiatans, 'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
+        	if($countpeserta==0){
+        		$entries = null;
+	        }
+	        else {
+	        	foreach ($pesertas as $peserta) {
+	        		if($peserta->kegiatan->id_tipe_kegiatan==$filter){
+		        		$kegiatans[] = $peserta->kegiatan;
+		        		$tanggal[] = strtotime($peserta->kegiatan->tanggal_awal);
+	        		}
+	        		
+	        	}
+	        	array_multisort($tanggal, SORT_DESC, $kegiatans);
+		        	$currentPage = LengthAwarePaginator::resolveCurrentPage();
+		        	$col = new Collection($kegiatans);
+		        	$perPage = 5;
+		        	$currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
+		        	$entries = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
+	        }
+			// $kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
+			// ->where('id_peneliti', $id_peneliti)
+			// ->where('id_tipe_kegiatan', $filter)->paginate(5);
+        	return view('peneliti.dashboard', ['kegiatans' => $entries, 'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
         }
 
     }

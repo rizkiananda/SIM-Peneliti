@@ -88,21 +88,6 @@
             </a>
           </li>
           @endif
-          @if($kegiatans!=null)
-            @if(\Request::is('dana'))
-            <li class="treeview active">
-              <a href="/formDana">
-                <i class="far fa-money-bill-alt"></i> <span> Penggunaan Dana</span>
-              </a>
-            </li>
-            @else
-            <li class="treeview">
-              <a href="/formDana">
-                <i class="far fa-money-bill-alt"></i> <span> Penggunaan Dana</span>
-              </a>
-            </li>
-            @endif
-          @endif
         </ul>
       </section>
       <!-- /.sidebar -->

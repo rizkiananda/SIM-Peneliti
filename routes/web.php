@@ -77,7 +77,7 @@ Route::group(['middleware' => ['auth','revalidate']],function(){
 	Route::get('/getDana/{id}', 'DanaController@getDana');
 	Route::get('/geteditdana/{id}', 'DanaController@singledana');
 	Route::put('/editpengajuan', 'DanaController@editPengajuan');
-	Route::post('/tambahPengajuan', 'DanaController@tambahPengajuan');
+	// Route::post('/tambahPengajuan', 'DanaController@tambahPengajuan');
 	Route::delete('/hapusPengajuan/{id}', 'DanaController@hapusPengajuan');
 	
 	//CV
