@@ -64,7 +64,6 @@ class KegiatanController extends Controller
 
         $kegiatan = kegiatan::join('tipe_kegiatan', 'tipe_kegiatan.id', '=', 'kegiatan.id_tipe_kegiatan')
         ->where('kegiatan.id', $id)
-        ->select('kegiatan.nama_kegiatan', 'kegiatan.tanggal_awal','kegiatan.tanggal_akhir', 'tipe_kegiatan.nama_tipe_kegiatan','kegiatan.lokasi')
         ->first();
           $penelitis=peserta_kegiatan::with(['peneliti'=>function($k){
             $k->with(['peneliti_psb'=>function($q){
@@ -82,11 +81,12 @@ class KegiatanController extends Controller
    		$peneliti_psb = peneliti_psb::where('id_pegawai', $id_pegawai)->first();
    		$id_peneliti = $peneliti_psb->id_peneliti;
    		$tipekegiatans = tipe_kegiatan::all();
+   		$filter = "all";
         $kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
         			->where('id_peneliti', $id_peneliti)
         			->where('nama_kegiatan','LIKE','%'.$keywords.'%')->paginate(5);
-
-        return view('peneliti.dashboard', ['kegiatans' => $kegiatans,'tipekegiatans'=>$tipekegiatans]);
+        
+        return view('peneliti.dashboard', ['kegiatans' => $kegiatans,'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
     }
 
     public function filterKegiatan(Request $request){
@@ -107,11 +107,11 @@ class KegiatanController extends Controller
 	        		$tanggal[] = strtotime($peserta->kegiatan->tanggal_awal);
 	        	}
 	        	array_multisort($tanggal, SORT_DESC, $kegiatans);
-		        	$currentPage = LengthAwarePaginator::resolveCurrentPage();
-		        	$col = new Collection($kegiatans);
-		        	$perPage = 5;
-		        	$currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
-		        	$entries = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
+	        	$currentPage = LengthAwarePaginator::resolveCurrentPage();
+	        	$col = new Collection($kegiatans);
+	        	$perPage = 5;
+	        	$currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
+	        	$entries = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
 	        }
         	return view('peneliti.dashboard', ['kegiatans' => $entries, 'tipekegiatans'=>$tipekegiatans, 'filter'=>$filter]);
         }
@@ -127,12 +127,19 @@ class KegiatanController extends Controller
 	        		}
 	        		
 	        	}
-	        	array_multisort($tanggal, SORT_DESC, $kegiatans);
+	        	
+	        	if(!isset($kegiatans) && !isset($tanggal)){
+	        		$entries = null;
+	        	}
+	        	else{
+	        		array_multisort($tanggal, SORT_DESC, $kegiatans);
 		        	$currentPage = LengthAwarePaginator::resolveCurrentPage();
 		        	$col = new Collection($kegiatans);
 		        	$perPage = 5;
 		        	$currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
 		        	$entries = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
+	        	}
+	        	
 	        }
 			// $kegiatans = kegiatan::join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
 			// ->where('id_peneliti', $id_peneliti)

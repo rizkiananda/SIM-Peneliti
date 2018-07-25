@@ -35,6 +35,7 @@
 		@endif
 	</div>
 	<hr>
+	
 	@if($kegiatan->lokasi!=null)
 	<div class="row">
 		<div class="col-md-2">
@@ -46,6 +47,19 @@
 	</div>
 	<hr>
 	@endif
+
+	@if($kegiatan->instansi!=null)
+	<div class="row">
+		<div class="col-md-2">
+			<h4><b>Instansi</b></h4>
+		</div>
+		<div class="col-md-10">
+			<h4>{{$kegiatan->instansi}}</h4>
+		</div>
+	</div>
+	<hr>
+	@endif
+
 	<div class="row">
 		<div class="col-md-2">
 			<h4><b>Tanggal </b></h4>
