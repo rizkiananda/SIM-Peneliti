@@ -44,21 +44,21 @@
 								<tbody>
 									<tr>
 										<td>
-											<input type="text" class="form-control" id="keterangan" name="keterangan[]" required>
+											<input type="text" class="form-control" id="keterangan0" name="keterangan[]" required>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="jumlah" name="jumlah[]" oninput="subtotals(0)">
-											<span id="alertjumlah" style="color: red"></span>
+											<input type="text" class="form-control" id="jumlah0" name="jumlah[]" oninput="subtotals(0)">
+											<span id="alertjumlah0" style="color: red"></span>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="unit" name="unit[]" placeholder="ex : kg, ml, lusin, dll">
+											<input type="text" class="form-control" id="unit0" name="unit[]" placeholder="ex : kg, ml, lusin, dll">
 										</td>
 										<td>
-											<input type="text" class="form-control" id="nominal" name="nominal[]" oninput="subtotals(0)" required>
-											<span id="alertnominal" style="color: red"></span>
+											<input type="text" class="form-control" id="nominal0" name="nominal[]" oninput="subtotals(0)" required>
+											<span id="alertnominal0" style="color: red"></span>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="subtotal" name="subtotal[]" readonly>
+											<input type="text" class="form-control" id="subtotal0" name="subtotal[]" readonly>
 										</td>
 										<td>
 											<button class="btn btn-danger" onclick="myDeleteFunction(this)"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -95,7 +95,8 @@
       'autoWidth'   : true
     })
 
-	
+	var statusButton = true
+
   function myCreateFunction() {
       var table = document.getElementById("data_table");
       var row = table.insertRow(1);
@@ -106,7 +107,7 @@
       var cell5 = row.insertCell(4);
       var cell6 = row.insertCell(5);
 
-  		let count = table.rows.length - 2
+  		let count = table.rows.length - 3
 
       cell1.innerHTML = '<input type="text" class="form-control" id="keterangan'+count+'" name="keterangan[]" required><br>';
       cell2.innerHTML = '<input type="text" class="form-control" id="jumlah'+count+'" name="jumlah[]" oninput="subtotals('+count+')"><span id="alertjumlah'+count+'" style="color: red"></span><br>';
@@ -120,6 +121,11 @@
   function myDeleteFunction(self) {
     // console.log($(self).closest("tr").index())
       document.getElementById("data_table").deleteRow($(self).closest("tr").index()+1);
+      let tables = document.getElementById("data_table");
+	  let trlength = tables.rows.length - 2
+	  if(trlength == 0){
+			document.getElementById("simpan").setAttribute("disabled","disabled");
+		}		
   }
 
 	function subtotals(count){
@@ -128,13 +134,14 @@
 		var nominal = 'nominal'
 		var alertnominal = 'alertnominal'
 		var subtotal = 'subtotal'
-		if(count != 0){
-			jumlah = jumlah + count
-			alertjumlah = alertjumlah + count
-			nominal = nominal + count
-			alertnominal = alertnominal + count
-			subtotal = subtotal + count
-		}
+
+		jumlah = jumlah + count
+		alertjumlah = alertjumlah + count
+		nominal = nominal + count
+		alertnominal = alertnominal + count
+		subtotal = subtotal + count
+
+
 		if(document.getElementById(jumlah).value!="" && document.getElementById(nominal).value!=""){
 			document.getElementById(subtotal).value=document.getElementById(jumlah).value*document.getElementById(nominal).value;
 		}
@@ -149,7 +156,7 @@
 		if(document.getElementById(nominal).value!="" && document.getElementById(nominal).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById(nominal).value!="" && document.getElementById(nominal).value == ""){
 			document.getElementById(alertnominal).innerHTML = "Isi dengan angka";
 			document.getElementById(subtotal).value="";
-			// document.getElementById("simpan").setAttribute("disabled","disabled");
+			document.getElementById("simpan").setAttribute("disabled","disabled");
 		}
 		else{
 			document.getElementById(alertnominal).innerHTML = "";
@@ -158,18 +165,54 @@
 		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
 			document.getElementById(alertjumlah).innerHTML = "Isi dengan angka";
 			document.getElementById(subtotal).value="";
-			// document.getElementById("simpan").setAttribute("disabled","disabled");
+			document.getElementById("simpan").setAttribute("disabled","disabled");
 		}
 		else{
 			document.getElementById(alertjumlah).innerHTML = "";
 		}
+
 		// console.log(count);
-		// for(i=0; i<=count; i++){
-		// 	if((document.getElementById(jumlah).value !="" && document.getElementById(jumlah).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) == -1 ) && (document.getElementById(nominal).value !="" && document.getElementById(nominal).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) == -1)){
-		// 	document.getElementById("simpan").removeAttribute("disabled","disabled");
-		// 	}
-		// }
+		let tables = document.getElementById("data_table");
+		let trlength = tables.rows.length - 2
+		let tableLength;
 		
+		if (count > trlength){
+			tableLength = count + 1
+		} else {
+			tableLength = trlength
+		}
+
+		for(var i=0; i<tableLength; i++){
+			let jmlh = 'jumlah'
+			let nom = 'nominal'
+	
+			jmlh = jmlh + i
+			nom = nom + i
+
+			if(document.getElementById(jmlh) != null && document.getElementById(nom) != null){
+				if(document.getElementById(jmlh).value!="" && document.getElementById(jmlh).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+					this.statusButton = false
+					console.log('before ', this.statusButton);
+					break
+				}
+				else{
+					this.statusButton = true
+				}
+
+				if(document.getElementById(nom).value!="" && document.getElementById(nom).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+					this.statusButton = false
+					break
+				}
+				else{
+					this.statusButton = true
+				}
+			}
+		}
+
+
+		if(this.statusButton){
+			document.getElementById("simpan").removeAttribute("disabled","disabled");
+		}		
 
 	}
 

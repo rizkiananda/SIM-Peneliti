@@ -63,7 +63,7 @@
   <script src="{{URL::asset('js/sweetalert.min.js')}}"></script>
    @yield('script')
   <script type="text/javascript">
-  $('#kolaborasi').on('show.bs.modal', function(event) {
+  $('#kegiatan').on('show.bs.modal', function(event) {
         var link = $(event.relatedTarget);
         var id = link.data('id');
         var modal = $(this);
@@ -81,10 +81,10 @@
           success:function(data) {
             console.log('success http get')
             console.log('datanya: ', data);
-            $(".tipe_kegiatan").html(data.nama_tipe_kegiatan);
-            $(".nama_kegiatan").html(data.nama_kegiatan);
-            $(".judul").html(data.judul);
-            $(".tanggal").html(data.tanggal_awal);
+            $(".tipe_kegiatan").html(data.kegiatan.nama_tipe_kegiatan);
+            $(".nama_kegiatan").html(data.kegiatan.nama_kegiatan);
+            $(".judul").html(data.berkas.judul);
+            $(".tanggal").html(data.kegiatan.tanggal_awal);
           },
           error: function(err){
             console.log('error ', err)
@@ -93,6 +93,69 @@
 
   });
 
+  $('#pubjurnal').on('show.bs.modal', function(event) {
+        var link = $(event.relatedTarget);
+        var id = link.data('id');
+        var modal = $(this);
+        console.log(id);
+        modal.find('#id_pubjurnal').val(id);
+        modal.find('#pubjurnal_id').val(id);
+        modal.find('.judul_paper').html("");
+        modal.find('.status_akreditasi').html("");
+        modal.find('.jurnal_ilmiah').html("");
+        modal.find('.url').html("");
+        modal.find('.tahun_terbit').html("");
+        $.ajax({
+          url : 'getKolaborasi/' + id,
+          type: "GET",
+          dataType: "json",
+          success:function(data) {
+            console.log('success http get')
+            console.log('datanya: ', data);
+            $(".judul_paper").html(data.pubjurnal.judul_artikel);
+            $(".status_akreditasi").html(data.pubjurnal.status_akreditasi);
+            $(".jurnal_ilmiah").html(data.pubjurnal.nama_berkala);
+            $(".url").html(data.pubjurnal.url);
+            $(".tahun_terbit").html(data.pubjurnal.tahun_terbit);
+          },
+          error: function(err){
+            console.log('error ', err)
+          }
+        });
+
+  });
+
+  $('#pubbuku').on('show.bs.modal', function(event) {
+      var link = $(event.relatedTarget);
+      var id = link.data('id');
+      var modal = $(this);
+      console.log(id);
+      modal.find('#id_pubbuku').val(id);
+      modal.find('#pubbuku_id').val(id);
+      modal.find('.judul_buku').html("");
+      modal.find('.book_chapter').html("");
+      modal.find('.nama_penerbit').html("");
+      modal.find('.tahun_terbit').html("");
+      modal.find('.isbn').html("");
+      $.ajax({
+        url : 'getKolaborasi/' + id,
+        type: "GET",
+        dataType: "json",
+        success:function(data) {
+          console.log('success http get')
+          console.log('datanya: ', data);
+          $(".judul_buku").html(data.pubbuku.judul_buku);
+          $(".book_chapter").html(data.pubbuku.judul_book_chapter);
+          $(".nama_penerbit").html(data.pubbuku.nama_penerbit);
+          $(".tahun_terbit").html(data.pubbuku.tahun_terbit);
+          $(".isbn").html(data.pubbuku.isbn);
+        },
+        error: function(err){
+          console.log('error ', err)
+        }
+      });
+
+  });
 </script>
 
 <script type="text/javascript">

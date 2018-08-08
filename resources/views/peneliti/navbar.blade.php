@@ -25,26 +25,26 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              @if($kegiatanss!=null)
+              @if($kegiatans!=0 || $jurnals!=0 || $bukus!=0)
                 <i class="far fa-envelope"></i>
-                <span class="label label-danger">{{count($kegiatanss)}}</span>
-              @else
+                <span class="label label-danger">{{$notif}}</span>
+              @elseif($kegiatans==0 && $jurnals==0 && $bukus==0)
                 <i class="far fa-envelope"></i>
               @endif
             </a>
             <ul class="dropdown-menu">
-              @if($kegiatanss!=null)
-              <li class="header">Anda memiliki {{count($kegiatanss)}} pesan kolaborasi</li>
-              @else
+              @if($kegiatans!=0 || $jurnals!=0 || $bukus!=0)
+              <li class="header">Anda memiliki {{$notif}} pesan kolaborasi</li>
+              @elseif($kegiatans==0 && $jurnals==0 && $bukus==0)
               <li class="header">Anda memiliki 0 pesan kolaborasi</li>
               @endif
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
                   <li><!-- start message -->
-                    @if($kegiatanss!=null)
-                      @foreach($kegiatanss as $index => $kegiatan)
-                        <a href="#" data-toggle="modal" data-target="#kolaborasi" data-id="{{$kegiatan->id}}">
+                    @if($kegiatans!=0)
+                      @foreach($kegiatans as $index => $kegiatan)
+                        <a href="#" data-toggle="modal" data-target="#kegiatan" data-id="{{$kegiatan->id}}">
                           <div class="pull-left">
                             <img src="{{asset('img/document.svg')}}" class="img-circle" alt="User Image">
                           </div>
@@ -54,12 +54,39 @@
                           <p>{{$kegiatan->nama_kegiatan}}</p>
                         </a>
                       @endforeach
-                    @else
-                    <div class="row" style="text-align: center">
-                      <br><br><br>
-                      <img src="{{asset('img/mail.svg')}}" style="width: 50px;height: 50px">
-                      <h4>Tidak ada pesan</h4>
-                    </div>
+                    @endif
+                    @if($jurnals!=0)
+                      @foreach($jurnals as $index => $jurnal)
+                        <a href="#" data-toggle="modal" data-target="#pubjurnal" data-id="{{$jurnal->id}}">
+                          <div class="pull-left">
+                            <img src="{{asset('img/document.svg')}}" class="img-circle" alt="User Image">
+                          </div>
+                          <h4>
+                            Publikasi Jurnal                      
+                          </h4>
+                          <p>{{$jurnal->judul_artikel}}</p>
+                        </a>
+                      @endforeach
+                    @endif
+                    @if($bukus!=0)
+                      @foreach($bukus as $index => $buku)
+                        <a href="#" data-toggle="modal" data-target="#pubbuku" data-id="{{$buku->id}}">
+                          <div class="pull-left">
+                            <img src="{{asset('img/document.svg')}}" class="img-circle" alt="User Image">
+                          </div>
+                          <h4>
+                            Publikasi Buku                       
+                          </h4>
+                          <p>{{$buku->judul_buku}}</p>
+                        </a>
+                      @endforeach
+                    @endif
+                    @if($kegiatans==0 && $jurnals==0 && $bukus==0)
+                      <div class="row" style="text-align: center">
+                        <br><br><br>
+                        <img src="{{asset('img/mail.svg')}}" style="width: 50px;height: 50px">
+                        <h4>Tidak ada pesan</h4>
+                      </div>
                     @endif
 
                   </li>
@@ -123,8 +150,8 @@
   </div>
 
 
-     <!-- Modal -->
-<div class="modal fade" id="kolaborasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+     <!-- Modal kegiatan-->
+<div class="modal fade" id="kegiatan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -165,7 +192,7 @@
         <h4>Apakah anda setuju dengan kolaborasi ini?</h4>
         <div class="row pull-right">
           <div class="col-md-5 col-sm-5 col-xs-5" style="margin-right: -10px">
-            <form role= "form" id="setuju" method="POST" action="{{url('/setujukolaborasi')}}" enctype="multipart/form-data">
+            <form role= "form" id="setuju" method="POST" action="{{url('/setujukegiatan')}}" enctype="multipart/form-data">
                <input type="text" name="kegiatan_id" id="kegiatan_id" value="" hidden>
                <input name="_method" type="hidden" value="PUT">
                <button type="submit" class="btn btn-primary">Setuju</button>
@@ -173,7 +200,7 @@
             </form>
             </div>
             <div class="ol-md-1 col-sm-1 col-xs-1">
-            <form role= "form" id="tolak" method="POST" action="{{url('/menolakkolaborasi')}}" enctype="multipart/form-data">
+            <form role= "form" id="tolak" method="POST" action="{{url('/menolakkegiatan')}}" enctype="multipart/form-data">
                <input type="text" name="id_kegiatan" id="id_kegiatan" value="" hidden>
                <input name="_method" type="hidden" value="PUT">
                <button type="submit" class="btn btn-danger">Tidak Setuju</button>
@@ -187,4 +214,142 @@
   </div>
 </div>
 
+     <!-- Modal jurnal-->
+<div class="modal fade" id="pubjurnal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Informasi Kolaborasi</b>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+            </h3>
+      </div>
+      <div class="modal-body">
+       <form class="form-horizontal">  
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Judul Paper</label>
+            <div class="col-md-10" style="margin-top: 15px">
+              <p class="judul_paper"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Status Akreditasi</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 7px">
+              <p class="status_akreditasi"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Nama Jurnal Ilmiah</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 7px">
+              <p class="jurnal_ilmiah"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">URL</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 15px">
+              <p class="url"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Tahun Terbit</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 15px">
+              <p class="tahun_terbit"></p>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <h4>Apakah anda setuju dengan kolaborasi ini?</h4>
+        <div class="row pull-right">
+          <div class="col-md-5 col-sm-5 col-xs-5" style="margin-right: -10px">
+            <form role= "form" id="setuju" method="POST" action="{{url('/setujupubjurnal')}}" enctype="multipart/form-data">
+               <input type="text" name="pubjurnal_id" id="pubjurnal_id" value="" hidden>
+               <input name="_method" type="hidden" value="PUT">
+               <button type="submit" class="btn btn-primary">Setuju</button>
+                {{ csrf_field() }}
+            </form>
+            </div>
+            <div class="ol-md-1 col-sm-1 col-xs-1">
+            <form role= "form" id="tolak" method="POST" action="{{url('/menolakpubjurnal')}}" enctype="multipart/form-data">
+               <input type="text" name="id_pubjurnal" id="id_pubjurnal" value="" hidden>
+               <input name="_method" type="hidden" value="PUT">
+               <button type="submit" class="btn btn-danger">Tidak Setuju</button>
+                {{ csrf_field() }}
+            </form>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
 
+     <!-- Modal buku-->
+<div class="modal fade" id="pubbuku" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Informasi Kolaborasi</b>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+            </h3>
+      </div>
+      <div class="modal-body">
+       <form class="form-horizontal">  
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Judul Buku</label>
+            <div class="col-md-10" style="margin-top: 15px">
+              <p class="judul_buku"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Judul Book Chapter</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 7px">
+              <p class="book_chapter"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Nama Penerbit</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 7px">
+              <p class="nama_penerbit"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">Tahun Terbit</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 15px">
+              <p class="tahun_terbit"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-2 col-sm-2 control-label">ISBN</label>
+            <div class="col-md-10 col-sm-10" style="margin-top: 15px">
+              <p class="isbn"></p>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <h4>Apakah anda setuju dengan kolaborasi ini?</h4>
+        <div class="row pull-right">
+          <div class="col-md-5 col-sm-5 col-xs-5" style="margin-right: -10px">
+            <form role= "form" id="setuju" method="POST" action="{{url('/setujupubbuku')}}" enctype="multipart/form-data">
+               <input type="text" name="pubbuku_id" id="pubbuku_id" value="" hidden>
+               <input name="_method" type="hidden" value="PUT">
+               <button type="submit" class="btn btn-primary">Setuju</button>
+                {{ csrf_field() }}
+            </form>
+            </div>
+            <div class="ol-md-1 col-sm-1 col-xs-1">
+            <form role= "form" id="tolak" method="POST" action="{{url('/menolakpubbuku')}}" enctype="multipart/form-data">
+               <input type="text" name="id_pubbuku" id="id_pubbuku" value="" hidden>
+               <input name="_method" type="hidden" value="PUT">
+               <button type="submit" class="btn btn-danger">Tidak Setuju</button>
+                {{ csrf_field() }}
+            </form>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>

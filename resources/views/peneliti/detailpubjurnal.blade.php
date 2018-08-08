@@ -5,6 +5,11 @@
 @endsection
 @section('content')
 <div class="container">
+<ol class="breadcrumb">
+		<li><a href="/"> Beranda</a></li>
+		<li><a href="/getPubjurnal/{{$pubjurnal->id}}">Publikasi Jurnal</a></li>
+		<li class="active">Detail Publikasi Jurnal</li>
+	</ol>
 <div class="panel panel-default" style="border-bottom: 5px solid #2196F3;">
   <div class="panel-body">
     <h2 style="color: #2196F3;text-align: center;"> Informasi Publikasi Jurnal </h2>

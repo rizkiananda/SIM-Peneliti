@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\View;
 use App\Model\tipe_kegiatan;
 use App\Model\peneliti_psb;
 use App\Model\peserta_kegiatan;
+use App\Model\peserta_publikasi_jurnal;
+use App\Model\peserta_publikasi_buku;
 use App\User;
 use Auth;
 
@@ -50,17 +52,45 @@ class AppServiceProvider extends ServiceProvider
             $id_pegawais = auth::user()->id_pegawai;
             $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawais)->first();
             $id_penelitis = $peneliti_psb->id_peneliti;
-            $pesertass = peserta_kegiatan::where([['status_konfirm', 'menunggu'],['id_peneliti',$id_penelitis]])->get();
-            $countpeserta = $pesertass->count();
-            if($countpeserta==0){
-                $kegiatanss = null;
+            $peserta_kegiatans = peserta_kegiatan::where([['status_konfirm', 'menunggu'],['id_peneliti',$id_penelitis]])->get();
+            $peserta_pubjurnals = peserta_publikasi_jurnal::where([['status_konfirm', 'menunggu'],['id_peneliti',$id_penelitis]])->get();
+            $peserta_pubbukus = peserta_publikasi_buku::where([['status_konfirm', 'menunggu'],['id_peneliti',$id_penelitis]])->get();
+            $countpeserta_kegiatan = $peserta_kegiatans->count();
+            $countpeserta_pubjurnal = $peserta_pubjurnals->count();
+            $countpeserta_pubbuku = $peserta_pubbukus->count();
+
+            if($countpeserta_kegiatan==0){
+                $kegiatans = 0;
             }
             else {
-                foreach ($pesertass as $peserta) {
-                    $kegiatanss[] = $peserta->kegiatan;
+                foreach ($peserta_kegiatans as $peserta_kegiatan) {
+                    $kegiatans[] = $peserta_kegiatan->kegiatan;
                 }  
             }
-            $view->with('kegiatanss',$kegiatanss);
+
+            if($countpeserta_pubbuku==0){
+                $bukus = 0;
+            }
+            else {
+                foreach ($peserta_pubbukus as $peserta_pubbuku) {
+                    $bukus[] = $peserta_pubbuku->publikasi_buku;
+                }  
+            }
+
+            if($countpeserta_pubjurnal==0){
+                $jurnals = 0;
+            }
+            else {
+                foreach ($peserta_pubjurnals as $peserta_pubjurnal) {
+                    $jurnals[] = $peserta_pubjurnal->publikasi_jurnal;
+                }  
+            }
+
+            
+
+            $notif = $countpeserta_kegiatan + $countpeserta_pubjurnal + $countpeserta_pubbuku;
+
+            $view->with(['kegiatans'=>$kegiatans, 'jurnals'=>$jurnals, 'bukus'=>$bukus, 'notif'=>$notif]);
         });
     }
 

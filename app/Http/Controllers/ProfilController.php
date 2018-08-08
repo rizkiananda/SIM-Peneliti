@@ -11,6 +11,7 @@ use App\Model\peneliti_psb;
 use App\Model\publikasi_jurnal;
 use App\Model\publikasi_buku;
 use App\Model\peserta_publikasi_jurnal;
+use App\Model\peserta_publikasi_buku;
 use App\Model\peserta_kegiatan;
 use App\User;
 use Auth;
@@ -48,7 +49,8 @@ class ProfilController extends Controller
               })
             ->select('kegiatan.id', 'berkas.judul')          
             ->distinct('berkas.judul')
-            ->get();
+            ->orderBy('kegiatan.tanggal_awal', 'desc')
+            ->take(5)->get();
 
    		$seminars = kegiatan::join('berkas', 'berkas.id_kegiatan', '=', 'kegiatan.id')
    					->join('peserta_kegiatan', 'peserta_kegiatan.id_kegiatan', '=', 'kegiatan.id')
@@ -58,25 +60,101 @@ class ProfilController extends Controller
    					->where('id_tipe_kegiatan',4)
             ->select('kegiatan.id','berkas.judul')
             ->distinct('berkas.judul')
-   					->get();
+   					->take(5)->get();
 
       $publikasijurnals = publikasi_jurnal::join('peserta_publikasi_jurnal', 'peserta_publikasi_jurnal.id_publikasi_jurnal', '=', 'publikasi_jurnal.id')
             ->where([['id_peneliti', $id_peneliti],['peserta_publikasi_jurnal.status_konfirm','setuju']])
-            ->select('publikasi_jurnal.id','publikasi_jurnal.judul_artikel')
+            ->select('publikasi_jurnal.id','publikasi_jurnal.judul_artikel', 'publikasi_jurnal.tahun_terbit')
             ->get();
       $publikasibukuu = publikasi_buku::join('peserta_publikasi_buku', 'peserta_publikasi_buku.id_publikasi_buku', '=', 'publikasi_buku.id')
             ->where([['id_peneliti', $id_peneliti],['peserta_publikasi_buku.status_konfirm','setuju']])
-            ->select('publikasi_buku.id','publikasi_buku.judul_buku')
-            ->get();
+            ->select('publikasi_buku.id','publikasi_buku.judul_buku', 'publikasi_buku.tahun_terbit')
+            ->take(3)->get();
 
       $koneksi = $this->koneksi();
       //Storage::put('treeData.json',$this->koneksi());
     	return view('peneliti.profil', ['pegawai'=>$pegawai, 'user'=>$user, 'peneliti_psb'=>$peneliti_psb, 'penelitians'=>$penelitians,'seminars'=>$seminars, 'publikasijurnals'=>$publikasijurnals, 'publikasibukuu'=> $publikasibukuu, 'koneksi'=> $koneksi]);
     }
 
-    public function getpubbuku($id){
-      $publikasibuku = publikasi_buku::find($id);
-      return $publikasibuku;
+    public function daftarPenelitian(){
+      $id_pegawai = auth::user()->id_pegawai;
+      $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+      $id_peneliti = $peneliti_psb->id_peneliti;
+      $pesertas = peserta_kegiatan::where([['status_konfirm', 'setuju'],['id_peneliti',$id_peneliti]])->get();
+      
+      foreach ($pesertas as $key => $penelitian) {
+          $peserta_penelitians[$key]=peserta_kegiatan::with(['peneliti'=>function($k){
+            $k->with(['peneliti_psb'=>function($q){
+              $q->with(['pegawai']);
+            }])->with(['peneliti_nonpsb']);
+          }])->with(['kegiatan'=>function($r){ $r->where('id_tipe_kegiatan', '!=', 4);}])->where('id_kegiatan', $penelitian->id_kegiatan)->get(); 
+      }
+   
+      if(!isset($peserta_penelitians)){
+        $peserta_penelitians=null;
+      }
+
+      return view('peneliti.daftarpenelitian', ['peserta_penelitians'=>$peserta_penelitians]);
+    }
+
+    public function daftarSeminar(){
+      $id_pegawai = auth::user()->id_pegawai;
+      $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+      $id_peneliti = $peneliti_psb->id_peneliti;
+      $pesertas = peserta_kegiatan::where([['status_konfirm', 'setuju'],['id_peneliti',$id_peneliti]])->get();
+      
+      foreach ($pesertas as $key => $seminar) {
+          $peserta_seminars[$key]=peserta_kegiatan::with(['peneliti'=>function($k){
+            $k->with(['peneliti_psb'=>function($q){
+              $q->with(['pegawai']);
+            }])->with(['peneliti_nonpsb']);
+          }])->with(['kegiatan'=>function($r){ $r->where('id_tipe_kegiatan', 4);}])->where('id_kegiatan', $seminar->id_kegiatan)->get(); 
+      }
+   
+      if(!isset($peserta_seminars)){
+        $peserta_seminars=null;
+      }
+      return view('peneliti.daftarseminar', ['peserta_seminars'=>$peserta_seminars]);
+    }
+
+    public function daftarPubjurnal(){
+      $id_pegawai = auth::user()->id_pegawai;
+      $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+      $id_peneliti = $peneliti_psb->id_peneliti;
+      $pesertas = peserta_publikasi_jurnal::where([['id_peneliti', $id_peneliti],['status_konfirm','setuju']])->get();
+      
+      foreach ($pesertas as $key => $jurnal) {
+          $peserta_pubjurnals[$key]=peserta_publikasi_jurnal::with(['peneliti'=>function($k){
+            $k->with(['peneliti_psb'=>function($q){
+              $q->with(['pegawai']);
+            }])->with(['peneliti_nonpsb']);
+          }])->with(['publikasi_jurnal'])->where('id_publikasi_jurnal', $jurnal->id_publikasi_jurnal)->get(); 
+      }
+
+      if(!isset($peserta_pubjurnals)){
+        $peserta_pubjurnals=null;
+      }
+      return view('peneliti.daftarpubjurnal', ['peserta_pubjurnals'=>$peserta_pubjurnals]);
+    }
+
+    public function daftarPubbuku(){
+      $id_pegawai = auth::user()->id_pegawai;
+      $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+      $id_peneliti = $peneliti_psb->id_peneliti;
+      $pesertas = peserta_publikasi_buku::where([['id_peneliti', $id_peneliti],['status_konfirm','setuju']])->get();
+      
+      foreach ($pesertas as $key => $buku) {
+          $peserta_pubbukus[$key]=peserta_publikasi_buku::with(['peneliti'=>function($k){
+            $k->with(['peneliti_psb'=>function($q){
+              $q->with(['pegawai']);
+            }])->with(['peneliti_nonpsb']);
+          }])->with(['publikasi_buku'])->where('id_publikasi_buku', $buku->id_publikasi_buku)->get(); 
+      }
+
+      if(!isset($peserta_pubbukus)){
+        $peserta_pubbukus=null;
+      }
+      return view('peneliti.daftarpubbuku', ['peserta_pubbukus'=>$peserta_pubbukus]);
     }
 
     public function compareusername(Request $request){

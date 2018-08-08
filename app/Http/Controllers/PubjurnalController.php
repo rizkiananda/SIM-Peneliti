@@ -410,9 +410,14 @@ class PubjurnalController extends Controller
 
 	public function hapusPubjurnal($id)
 	{
-		publikasi_jurnal::find($id)->delete();
-		peserta_publikasi_jurnal::where('id_publikasi_jurnal',$id)->delete();
-		$notification = array('title'=> 'Berhasil!', 'msg'=>'Publikasi jurnal berhasil dihapus!','alert-type'=>'success');
+		$judul_paper=publikasi_jurnal::find($id)->judul_artikel;
+		$id_pegawai = auth::user()->id_pegawai;
+        $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+        $id_peneliti = $peneliti_psb->id_peneliti;
+		peserta_publikasi_jurnal::where([['id_publikasi_jurnal',$id],['id_peneliti', $id_peneliti]])->update([
+			'status_konfirm'=>'menolak'
+		]);
+		$notification = array('title'=> 'Berhasil!', 'msg'=>$judul_paper.' berhasil dihapus!','alert-type'=>'success');
 		return redirect('/profil')->with($notification);
 	}
 }

@@ -61,17 +61,24 @@ Route::group(['middleware' => ['auth','revalidate']],function(){
 
 	//kolaborasi
 	Route::get('/getKolaborasi/{id}', 'KolaborasiController@getKolaborasi');
-	Route::put('/setujukolaborasi', 'KolaborasiController@setujukolaborasi');
-	Route::put('/menolakkolaborasi', 'KolaborasiController@menolakkolaborasi');
+	Route::put('/setujukegiatan', 'KolaborasiController@setujukegiatan');
+	Route::put('/menolakkegiatan', 'KolaborasiController@menolakkegiatan');
+	Route::put('/setujupubjurnal', 'KolaborasiController@setujupubjurnal');
+	Route::put('/menolakpubjurnal', 'KolaborasiController@menolakpubjurnal');
+	Route::put('/setujupubbuku', 'KolaborasiController@setujupubbuku');
+	Route::put('/menolakpubbuku', 'KolaborasiController@menolakpubbuku');
 
 	//profil
 	Route::get('/profil', 'ProfilController@getProfil');
-	Route::get('/getpubbuku/{id}', 'ProfilController@getpubbuku');
 	Route::post('/compareusername','ProfilController@compareusername');
 	Route::put('/editusername','ProfilController@editusername');
 	Route::post('/comparepass', 'ProfilController@comparepass');
 	Route::put('/editpassword','ProfilController@editpassword');
 	Route::get('/koneksi', 'ProfilController@koneksi');
+	Route::get('/daftarpenelitian', 'ProfilController@daftarPenelitian');
+	Route::get('/daftarseminar', 'ProfilController@daftarSeminar');
+	Route::get('/daftarpublikasijurnal', 'ProfilController@daftarPubjurnal');
+	Route::get('/daftarpublikasibuku', 'ProfilController@daftarPubbuku');
 
 	//penggunaan dana
 	Route::get('/formDana/{id}', 'DanaController@getformdana');
@@ -84,6 +91,10 @@ Route::group(['middleware' => ['auth','revalidate']],function(){
 	
 	//CV
 	Route::get('/getPDF', 'PDFController@getPDF');
+
+	Route::get('/logout', function(){
+		auth()->logout();
+	});
 
 
 });

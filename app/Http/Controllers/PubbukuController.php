@@ -401,7 +401,12 @@ class PubbukuController extends Controller
 	public function hapusPubbuku($id)
 	{
 		$judulbuku=publikasi_buku::find($id)->judul_buku;
-		publikasi_buku::find($id)->delete();
+		$id_pegawai = auth::user()->id_pegawai;
+        $peneliti_psb = peneliti_psb::where('id_pegawai',$id_pegawai)->first();
+        $id_peneliti = $peneliti_psb->id_peneliti;
+		peserta_publikasi_buku::where([['id_publikasi_buku',$id],['id_peneliti', $id_peneliti]])->update([
+			'status_konfirm'=>'menolak'
+		]);
 		$notification = array('title'=> 'Berhasil!', 'msg'=>$judulbuku.' berhasil dihapus!','alert-type'=>'success');
 		return redirect('/profil')->with($notification);
 	}

@@ -6,6 +6,10 @@
 @endsection
 @section('content')
 <div class="container">
+	<ol class="breadcrumb">
+		<li><a href="/"> Beranda</a></li>
+		<li class="active">Publikasi Jurnal</li>
+	</ol>
 	<div class="row">
 		<div class="col-md-9">
 			<div class="panel panel-default">

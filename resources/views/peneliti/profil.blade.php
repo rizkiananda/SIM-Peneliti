@@ -47,7 +47,7 @@
 								<div class="col-md-6">
 									<div class="box box-info" style="border: 1px solid #00c0ef; border-top: 5px solid #00c0ef;">
 										<div class="box-header with-border">
-											<h4>Penelitian</h4>
+											<h3 style="text-align: center"><b>Penelitian</b></h3>
 											<div class="box-tools pull-right">
 												<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 												</button>
@@ -58,7 +58,8 @@
 											    @foreach($penelitians as $penelitian)
 													<div class="panel panel-default" style="margin-top: -10px">
 											 			<div class="panel-body">
-															<p>{{$penelitian->judul}}</p>
+															<h4>{{$penelitian->judul}}</h4>
+															<h5 style="color: #999999">{{Carbon\Carbon::parse($penelitian->tanggal_awal)->format('d F Y')}}</h5>
 															<a href="{{url('/detailKegiatan/'.$penelitian->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i> Detail</a>
 													 	</div>
 													</div>
@@ -77,8 +78,7 @@
 											@endif
 										</div>
 										<div class="box-footer clearfix">
-											{{-- <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left"><i class="fas fa-plus-circle"></i> Tambah </a>
-											<a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a> --}}
+											<a href="{{url('/daftarpenelitian')}}" class="btn btn-info btn-flat pull-right"> Lihat Semua </a>
 										</div>
 									</div>
 								</div>
@@ -86,7 +86,7 @@
 								<div class="col-md-6">
 									<div class="box box-info" style="border: 1px solid #00c0ef; border-top: 5px solid #00c0ef;">
 										<div class="box-header with-border">
-											<h4>Pengalaman publikasi di berkala ilmiah</h4>
+											<h3 style="text-align: center;"><b>Pengalaman publikasi di Jurnal ilmiah</b></h3>
 											<div class="box-tools pull-right">
 												<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 												</button>
@@ -97,16 +97,26 @@
 											@foreach($publikasijurnals as $publikasijurnal)
 												<div class="panel panel-default" style="margin-top: -10px">
 												 	<div class="panel-body">												
-														<p>{{$publikasijurnal->judul_artikel}}</p>
+														<h4>{{$publikasijurnal->judul_artikel}}</h4>
+														<h5 style="color: #999999">{{$publikasijurnal->tahun_terbit}}</h5>
 														<form class="form-inline" role="form" method="POST" action="{{url('/hapusPubjurnal/'.$publikasijurnal->id)}}" enctype="multipart/form-data">
-															<div class="form-group">
+															{{-- PC --}}
+															<div class="form-group hidden-xs">
 																<a href="/getPubjurnal/{{$publikasijurnal->id}}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
 																<input type="hidden" name="_method" value="DELETE"/>
 																<button type="submit" class="btn btn-danger" id="delete" data-id="{{$publikasijurnal->id}}" data-name="{{$publikasijurnal->judul_artikel}}" data-table="publikasi_jurnal"><i class="fas fa-trash-alt"></i> Hapus</button>
 																<a href="{{url('/detailPubjurnal/'.$publikasijurnal->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i> Detail</a>
 															</div>
+															{{-- Mobile --}}
+															<div class="form-group visible-xs">
+																<a href="/getPubjurnal/{{$publikasijurnal->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+																<input type="hidden" name="_method" value="DELETE"/>
+																<button type="submit" class="btn btn-danger" id="delete" data-id="{{$publikasijurnal->id}}" data-name="{{$publikasijurnal->judul_artikel}}" data-table="publikasi_jurnal"><i class="fas fa-trash-alt"></i></button>
+																<a href="{{url('/detailPubjurnal/'.$publikasijurnal->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i></a>
+															</div>
 															{{csrf_field()}}
 														</form>
+
 													</div>
 												</div>
 											@endforeach
@@ -124,8 +134,7 @@
 										@endif
 										</div>
 										<div class="box-footer clearfix">
-											<a href="publikasijurnal" class="btn btn-info pull-right"><i class="fas fa-plus-circle"></i> Tambah </a>
-										
+											<a href="{{url('/daftarpublikasijurnal')}}" class="btn btn-info btn-flat pull-right"> Lihat Semua </a>
 										</div>
 									</div>
 
@@ -136,7 +145,7 @@
 								<div class="col-md-6">
 									<div class="box box-info" style="border: 1px solid #00c0ef; border-top: 5px solid #00c0ef;">
 										<div class="box-header with-border">
-											<h4>Seminar Ilmiah</h4>
+											<h3 style="text-align: center;"><b>Seminar Ilmiah</b></h3>
 											<div class="box-tools pull-right">
 												<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 												</button>
@@ -147,7 +156,8 @@
 											@foreach($seminars as $seminar)
 												<div class="panel panel-default" style="margin-top: -10px">
 												 	<div class="panel-body">
-															<p>{{$seminar->judul}}</p>
+															<h4>{{$seminar->judul}}</h4>
+															<h5 style="color: #999999">{{Carbon\Carbon::parse($seminar->tanggal_awal)->format('d F Y')}}</h5>
 															<a href="{{url('/detailKegiatan/'.$seminar->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i> Detail</a>
 													</div>
 												</div>
@@ -166,7 +176,7 @@
 										@endif
 										</div>
 										<div class="box-footer clearfix">
-
+											<a href="{{url('/daftarseminar')}}" class="btn btn-info btn-flat pull-right"> Lihat Semua </a>
 										</div>
 									</div>
 								</div>
@@ -174,7 +184,7 @@
 								<div class="col-md-6">
 									<div class="box box-info" style="border: 1px solid #00c0ef; border-top: 5px solid #00c0ef;">
 										<div class="box-header with-border">
-											<h4>Publikasi Buku</h4>
+											<h3 style="text-align: center;"><b>Publikasi Buku</b></h3>
 											<div class="box-tools pull-right">
 												<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 												</button>
@@ -185,12 +195,22 @@
 											@foreach($publikasibukuu as $publikasibuku)
 												<div class="panel panel-default" style="margin-top: -10px">
 												 	<div class="panel-body">
-														<p>{{$publikasibuku->judul_buku}} </p>
+														<h4>{{$publikasibuku->judul_buku}} </h4>
+														<h5 style="color: #999999">{{$publikasibuku->tahun_terbit}}</h5>
 														<form class="form-inline" role="form" method="POST" action="{{url('/hapusPubbuku/'.$publikasibuku->id)}}" enctype="multipart/form-data">
-															<div class="form-group">
+															{{-- PC --}}
+															<div class="form-group hidden-xs">
 																<a href="/getPubbuku/{{$publikasibuku->id}}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
 																<input type="hidden" name="_method" value="DELETE"/>
 																<button id="delete" data-id="{{$publikasibuku->id}}" data-name="{{$publikasibuku->judul_buku}}" data-table="publikasi_buku" type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Hapus</button>
+																<a href="{{url('/detailPubbuku/'.$publikasibuku->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i> Detail</a>
+															</div>
+															{{-- Mobile --}}
+															<div class="form-group visible-xs">
+																<a href="/getPubbuku/{{$publikasibuku->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+																<input type="hidden" name="_method" value="DELETE"/>
+																<button id="delete" data-id="{{$publikasibuku->id}}" data-name="{{$publikasibuku->judul_buku}}" data-table="publikasi_buku" type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+																<a href="{{url('/detailPubbuku/'.$publikasibuku->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i></a>
 															</div>
 															{{csrf_field()}}
 														</form>
@@ -211,8 +231,7 @@
 										@endif
 										</div>
 										<div class="box-footer clearfix">
-											<a href="/publikasibuku" class="btn btn-info pull-right"><i class="fas fa-plus-circle"></i> Tambah </a>
-			
+											<a href="{{url('/daftarpublikasibuku')}}" class="btn btn-info btn-flat pull-right"> Lihat Semua </a>
 										</div>
 									</div>
 								</div>
@@ -229,6 +248,7 @@
 								</div>
 							</div>
 
+							{{-- Tree koneksi antar peneliti --}}
 				          	<script src="{{URL::asset('js/d3.js')}}"></script>
 				          	<script type="text/javascript">
 								var margin = {top: 20, right: 150, bottom: 20, left: 150},

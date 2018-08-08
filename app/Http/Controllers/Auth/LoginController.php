@@ -26,20 +26,20 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    // protected $redirectTo = '/';
 
-    // protected function redirectTo(){
-    //     if (Auth::user()->pegawai->peran == 1 && Auth::user()->tabel_user_si->id_si==2 && Auth::user()->tabel_user_si->id_role==7)
-    //     {
-    //       return '/';
-    //     }
-    //     else{
-    //         Auth::logout();
-    //         return '/login';
-    //     }
-
-       
-    //   }
+    protected function redirectTo(){
+        $auth = auth::user()->tabel_user_si;
+        foreach ($auth as $key => $auths) {
+            if($auths->id_si==2){
+                if($auth[$key]->id_role=='7'){
+                    return redirect('/');
+                }
+            }
+        }
+        Auth::logout();
+        return redirect('/login');
+      }
         
 
     /**
