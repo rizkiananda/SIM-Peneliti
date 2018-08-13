@@ -1,5 +1,9 @@
 @extends('layout.peneliti')
-@section('title', 'Kegiatan')
+@foreach($tipekegiatans as $tipekegiatan)
+@if($id==$tipekegiatan->id)
+@section('title', 'SIMPEL - '.$tipekegiatan->nama_tipe_kegiatan)
+@endif
+@endforeach
 @section('breadcrumb', 'Seminar Ilmiah')
 @section('content')
 <div class="container">

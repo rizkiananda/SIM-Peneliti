@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'penggunaan dana')
+@section('title', 'SIMPEL - Form Penggunaan Dana')
 @section('styles')
 
 @endsection

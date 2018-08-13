@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Daftar Publikasi Jurnal')
+@section('title', 'SIMPEL - Daftar Publikasi Jurnal')
 @section('styles')
 <link rel="stylesheet" href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection
@@ -47,15 +47,20 @@
 								<td>{{$pubjurnal->publikasi_jurnal->status_akreditasi}}</td>
 								<td>{{$pubjurnal->publikasi_jurnal->url}}</td>
 								<td>{{$pubjurnal->publikasi_jurnal->tahun_terbit}}</td>
-								<form method="POST" action="{{url('/hapusPubjurnal/'.$pubjurnal->publikasi_jurnal->id)}}" enctype="multipart/form-data">
+								
 								<td>
 									<a href="/getPubjurnal/{{$pubjurnal->publikasi_jurnal->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
 								</td>
 								<td>
+								<form method="POST" action="{{url('/hapusPubjurnal/'.$pubjurnal->publikasi_jurnal->id)}}" enctype="multipart/form-data">
 									<input type="hidden" name="_method" value="DELETE"/>
+									{{-- <input type="hidden" name="_method" value="PUT"> --}}
 									<button type="submit" class="btn btn-danger" id="delete" data-id="{{$pubjurnal->publikasi_jurnal->id}}" data-name="{{$pubjurnal->publikasi_jurnal->judul_artikel}}" data-table="publikasi_jurnal"><i class="fas fa-trash-alt"></i></button>
-								</td>
+								{{csrf_field()}}
 								</form>
+								</td>
+								
+								
 							</tr>
 						@endforeach
 					@else

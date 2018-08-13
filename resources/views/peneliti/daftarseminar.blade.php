@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Daftar Seminar Ilmiah')
+@section('title', 'SIMPEL - Daftar Seminar Ilmiah')
 @section('styles')
 <link rel="stylesheet" href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection

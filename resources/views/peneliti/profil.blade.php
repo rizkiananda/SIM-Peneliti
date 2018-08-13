@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Profil')
+@section('title', 'SIMPEL - Profil')
 @section('breadcrumb', 'Profil')
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('bower_components/select2/dist/css/select2.css')}}">
@@ -68,11 +68,11 @@
 												<div class="row" style="text-align: center">
 													<div class="hidden-xs">
 														<img src="{{asset('img/filewarning.svg')}}" style="width: 70px; height: 70px">
-														<h4>Belum ada rekam jejak</h4>
+														<h4>Belum ada penelitian</h4>
 													</div>
 													<div class="visible-xs">
 														<img src="{{asset('img/filewarning.svg')}}" style="width: 50px; height: 50px">
-														<h4>Belum ada rekam jejak</h4>
+														<h4>Belum ada penelitian</h4>
 													</div>
 												</div>
 											@endif
@@ -104,6 +104,7 @@
 															<div class="form-group hidden-xs">
 																<a href="/getPubjurnal/{{$publikasijurnal->id}}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
 																<input type="hidden" name="_method" value="DELETE"/>
+																{{-- <input type="hidden" name="_method" value="PUT"> --}}
 																<button type="submit" class="btn btn-danger" id="delete" data-id="{{$publikasijurnal->id}}" data-name="{{$publikasijurnal->judul_artikel}}" data-table="publikasi_jurnal"><i class="fas fa-trash-alt"></i> Hapus</button>
 																<a href="{{url('/detailPubjurnal/'.$publikasijurnal->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i> Detail</a>
 															</div>
@@ -111,6 +112,7 @@
 															<div class="form-group visible-xs">
 																<a href="/getPubjurnal/{{$publikasijurnal->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
 																<input type="hidden" name="_method" value="DELETE"/>
+																{{-- <input type="hidden" name="_method" value="PUT"> --}}
 																<button type="submit" class="btn btn-danger" id="delete" data-id="{{$publikasijurnal->id}}" data-name="{{$publikasijurnal->judul_artikel}}" data-table="publikasi_jurnal"><i class="fas fa-trash-alt"></i></button>
 																<a href="{{url('/detailPubjurnal/'.$publikasijurnal->id)}}" class="btn btn-primary"><i class="fas fa-info-circle"></i></a>
 															</div>
@@ -124,11 +126,11 @@
 											<div class="row" style="text-align: center">
 												<div class="hidden-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 70px; height: 70px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada publikasi jurnal</h4>
 												</div>
 												<div class="visible-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 50px; height: 50px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada publikasi jurnal</h4>
 												</div>
 											</div>
 										@endif
@@ -166,11 +168,11 @@
 											<div class="row" style="text-align: center">
 												<div class="hidden-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 70px; height: 70px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada seminar ilmiah</h4>
 												</div>
 												<div class="visible-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 50px; height: 50px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada seminar ilmiah</h4>
 												</div>
 											</div>
 										@endif
@@ -221,11 +223,11 @@
 											<div class="row" style="text-align: center">
 												<div class="hidden-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 70px; height: 70px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada publikasi buku</h4>
 												</div>
 												<div class="visible-xs">
 													<img src="{{asset('img/filewarning.svg')}}" style="width: 50px; height: 50px">
-													<h4>Belum ada rekam jejak</h4>
+													<h4>Belum ada publikasi buku</h4>
 												</div>
 											</div>
 										@endif

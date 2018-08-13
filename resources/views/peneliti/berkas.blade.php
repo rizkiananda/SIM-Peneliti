@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Berkas '.$tipekegiatan->nama_tipe_kegiatan)
+@section('title', 'SIMPEL - Berkas '.$tipekegiatan->nama_tipe_kegiatan)
 
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('css/bootstrap-select.min.css')}}">
@@ -111,16 +111,19 @@
 											<label><u>{{$tipeberkas->nama_tipe_berkas}}</u></label><br>
 											<label class="control-label">Berkas yang sudah ada : </label><br>
 											<label style="color: #1c7bd9;">{{$berkas_kegiatans[$index]->nama_berkas}}</label><br>
-											<input id="fileUpload" type="file" name="berkas{{$tipeberkas->id}}" onchange="ValidateExtension()">
-											<span id="lblError" style="color: red"></span>
+											<input id="fileUpload{{$index}}" type="file" name="berkas{{$tipeberkas->id}}" onchange="ValidateExtension(this)">
+											<span id="lblError{{$index}}" style="color: red"></span>
+											<input type="text" name="count" id="count{{$index}}" value="{{$index}}" hidden>
 										@else
 											<label><u>{{$tipeberkas->nama_tipe_berkas}}</u></label>
-											<input id="fileUpload" type="file" name="berkas{{$tipeberkas->id}}" onchange="ValidateExtension()">
-											<span id="lblError" style="color: red"></span>
+											<input id="fileUpload{{$index}}" type="file" name="berkas{{$tipeberkas->id}}" onchange="ValidateExtension(this)">
+											<span id="lblError{{$index}}" style="color: red"></span>
+											<input type="text" name="count" id="count{{$index}}" value="{{$index}}" hidden>
 										@endif
 										<hr>
-								
+						
 									@endforeach
+									<input type="text" name="count" id="jmlfile" value="{{$index}}" hidden>
 								</div>
 								<button id="submit" type="submit" class="btn btn-success btn-lg">Simpan</button>
 								{{csrf_field()}}
@@ -187,19 +190,39 @@
 @section('script')
 <script type="text/javascript" src="{{URL::asset('bower_components/select2/dist/js/select2.full.js')}}"></script>
 <script>
-	function ValidateExtension() {
+	function ValidateExtension(obj) {
+		var statusButton = true
+		var id = obj.id.charAt(10)
+		var lblError = 'lblError'
         var allowedFiles = [".pdf",".doc",".docx"];
-        var fileUpload = document.getElementById("fileUpload");
-        var lblError = document.getElementById("lblError");
+        var lblError = document.getElementById(lblError + id);
         var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
-        if (!regex.test(fileUpload.value.toLowerCase()) && fileUpload.value!="") {
+        if (!regex.test(obj.value.toLowerCase()) && obj.value!="") {
             lblError.innerHTML = "Silahkan masukkan format file: <b>" + allowedFiles.join(', ') + "</b>.";
             document.getElementById("submit").setAttribute("disabled","disabled");
             return false;
         }
-        lblError.innerHTML = "";
-            document.getElementById("submit").removeAttribute("disabled");
-            return true;
+        else{
+        	lblError.innerHTML = "";
+        }
+        
+        var jmlfile = document.getElementById('jmlfile').value
+        
+        for(var i=0; i<=jmlfile; i++){
+        	let fileUpload = 'fileUpload'
+        	fileUpload = fileUpload + i 
+        	if (!regex.test(document.getElementById(fileUpload).value.toLowerCase()) && document.getElementById(fileUpload).value!="") {
+        		this.statusButton = false
+				break
+        	}
+        	else{
+        		this.statusButton = true
+        	}
+        }
+
+        if(this.statusButton){
+			document.getElementById("submit").removeAttribute("disabled","disabled");
+		}		
     }
 
     $('#psb').select2({

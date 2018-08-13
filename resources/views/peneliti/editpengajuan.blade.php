@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'penggunaan dana')
+@section('title', 'SIMPEL - Daftar Penggunaan Dana')
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('css/table.css')}}">
 @endsection
@@ -7,7 +7,7 @@
 <div class="container">
 <ol class="breadcrumb" style="font-size: 20px">
 	<li><a href="/"></i> Beranda</a></li>
-	<li class="active">Daftar Pengajuan Dana Kegiatan</li>
+	<li class="active">Daftar Penggunaan Dana</li>
 </ol>
 	@if($trans_proyeks!=null)
 	<div class="row">
@@ -103,7 +103,7 @@
 			<img src="{{asset('img/signature.svg')}}" style="width: 200px; height: 200px; margin-top: 100px">
 			<h2>Belum ada pengajuan penggunaan dana</h2>
 			@if($status=="available")
-				<a class="btn btn-primary" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}" class="btn btn-primary btn-success pull-right" > <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></a>
+				<a class="btn btn-primary" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}"> <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></a>
 			@else
 				{{-- <button class="btn btn-primary" disabled> <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></button> --}}
 				<h4><div class="alert alert-danger" role="alert">Waktu kegiatan telah berakhir</div></h4>
@@ -112,6 +112,12 @@
 		<div class="visible-xs">
 			<img src="{{asset('img/signature.svg')}}" style="width: 150px; height: 150px">
 			<h4>Belum ada pengajuan penggunaan dana</h4>
+			@if($status=="available")
+				<a class="btn btn-xs btn-primary" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}"> <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></a>
+			@else
+				{{-- <button class="btn btn-primary" disabled> <h4><span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</h4></button> --}}
+				<h4><div class="alert alert-danger" role="alert">Waktu kegiatan telah berakhir</div></h4>
+			@endif
 		</div>
 	</div>
 	@endif

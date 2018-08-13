@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Publikasi Buku')
+@section('title', 'SIMPEL - Publikasi Buku')
 @section('breadcrumb', 'Publikasi')
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('bower_components/select2/dist/css/select2.css')}}">
@@ -22,11 +22,11 @@
 						<form style="font-size: 18px" method="POST" action="{{url('/tambahpubbuku')}}"> 
 							<div class="form-group">
 								<label for="exampleInputEmail1">Judul Buku</label>
-								<input type="text" class="form-control" id="" name="judulbuku">
+								<input type="text" class="form-control" id="" name="judulbuku" required>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Judul Book Chapter</label>
-								<input type="text" class="form-control" id="" name="judulchapter">
+								<input type="text" class="form-control" id="" name="judulchapter" required>
 							</div>
 							<div class="form-group">
 								<label for="tag_list">Penulis (berafiliasi dengan Trop BRC)</label>
@@ -45,16 +45,16 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Tahun Terbit</label>
-								<input type="text" class="form-control" id="tahun" name="tahunterbit" oninput="validasitahun()">
+								<input type="text" class="form-control" id="tahun" name="tahunterbit" oninput="validasitahun()" required>
 								<span id="alerttahun" class="text-danger"></span>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Nama Penerbit</label>
-								<input type="text" class="form-control" id="" name="namapenerbit">
+								<input type="text" class="form-control" id="" name="namapenerbit" required>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">ISBN</label>
-								<input type="text" class="form-control" id="" name="isbn">
+								<input type="text" class="form-control" id="" name="isbn" required>
 							</div>
 							<button id="submit" type="submit" class="btn btn-success btn-lg">Simpan</button>
 							{{csrf_field()}}

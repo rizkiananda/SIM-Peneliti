@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Daftar Publikasi Jurnal')
+@section('title', 'SIMPEL - Daftar Publikasi Buku')
 @section('styles')
 <link rel="stylesheet" href="{{asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection
@@ -24,6 +24,8 @@
 							<th>Tahun Terbit</th>
 							<th>Nama Penerbit</th>
 							<th>ISBN</th>
+							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -43,6 +45,17 @@
 								<td>{{$pubbuku->publikasi_buku->tahun_terbit}}</td>
 								<td>{{$pubbuku->publikasi_buku->nama_penerbit}}</td>
 								<td>{{$pubbuku->publikasi_buku->isbn}}</td>
+								<td>
+									<a href="/getPubbuku/{{$pubbuku->publikasi_buku->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+								</td>
+								<td>
+									<form method="POST" action="{{url('/hapusPubbuku/'.$pubbuku->publikasi_buku->id)}}" enctype="multipart/form-data">
+									<input type="hidden" name="_method" value="DELETE"/>
+									{{-- <input type="hidden" name="_method" value="PUT"> --}}
+									<button type="submit" class="btn btn-danger" id="delete" data-id="{{$pubbuku->publikasi_buku->id}}" data-name="{{$pubbuku->publikasi_buku->judul_buku}}" data-table="publikasi_buku"><i class="fas fa-trash-alt"></i></button>
+									{{csrf_field()}}
+									</form>
+								</td>
 							</tr>
 							@endforeach
 					@else
@@ -68,5 +81,36 @@
 
 <script type="text/javascript">
     $('#daftar_penelitian').DataTable()
+</script>
+
+<script type="text/javascript">
+	@if(Session::has('msg'))
+      swal("{{ Session::get('title')}}","{{ Session::get('msg')}}","{{ Session::get('alert-type')}}");
+  	@endif
+</script>
+
+<script type="text/javascript">
+$('button#delete').on('click',function(e){
+    e.preventDefault();
+    var form = $(this).parents('form');
+    var nama = $(e.currentTarget).attr('data-name');
+    var tabel = $(e.currentTarget).attr('data-table');
+    swal({
+      title: 'Hapus',
+      text: "Anda yakin akan menghapus "+nama+" ? ",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Hapus',
+      cancelButtonText: 'Batal',
+      confirmButtonClass: 'btn btn-success',
+      cancelButtonClass: 'btn btn-danger',
+      buttonsStyling: false
+    },
+    function (isConfirm) {
+        if(isConfirm) form.submit();
+    });
+  });
 </script>
 @endsection

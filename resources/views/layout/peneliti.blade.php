@@ -9,6 +9,7 @@
     <meta http-equiv="expires" content="0">
     
     <title>@yield('title')</title>
+    <link rel="shortcut icon" href="{{URL::asset('img/ipb.png')}}" />
     <link rel="stylesheet" href="{{URL::asset('bootstrap/css/bootstrap.css')}}">   
     <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.css')}}">
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">

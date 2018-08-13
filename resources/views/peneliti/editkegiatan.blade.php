@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Edit Kegiatan')
+@section('title', 'SIMPEL - Edit '.$tipekegiatan->nama_tipe_kegiatan)
 @section('breadcrumb', 'Seminar Ilmiah')
 @section('content')
 <div class="container">
@@ -48,7 +48,7 @@
 										@if($berkas!=null)
 											<label class="control-label">Foto yang sudah diupload : </label><br>
       										<img src="{{asset($tipekegiatan->nama_tipe_kegiatan.'/'.$kegiatan->id.'/foto/'.$berkas->nama_berkas)}}" style="width: 50px;height: 50px; margin-right: 10px;margin-bottom: 15px">
-      										<label style="white-space: normal">{{$berkas->nama_berkas}}</label>
+      										<label style="white-space: normal; color: #1c7bd9">{{$berkas->nama_berkas}}</label>
 										<input type="file" name="foto" >
 										@else
 											<input type="file" name="foto">
@@ -98,7 +98,7 @@
 						<img src="{{asset('img/contract.svg')}}" style="width: 50px;height: 50px">
 					</div>
 					<div style="text-align: center">
-						<h3 style="color: #1c7bd9"><b>Ubah data yang diperlukan untuk  kegiatan {{strtolower($tipekegiatan->nama_tipe_kegiatan)}}</b></h3>
+						<h3 style="color: #1c7bd9"><b>Ubah data yang diperlukan untuk kegiatan {{strtolower($tipekegiatan->nama_tipe_kegiatan)}}</b></h3>
 					</div>
 				</div>
 			</div>

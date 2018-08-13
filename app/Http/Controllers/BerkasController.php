@@ -80,7 +80,7 @@ class BerkasController extends Controller
 		$id_kegiatan = $kegiatan->id;
     	$tipekegiatan = $kegiatan->tipe_kegiatan;
     	$tipe_berkas = $tipekegiatan->tipe_berkas;
-    	
+
     	
     	foreach ($tipe_berkas as $berkas_kegiatan) {
     		$berkas_kegiatans[] = berkas::where([['id_kegiatan', $id],['id_tipe_berkas', $berkas_kegiatan->id]])->first();

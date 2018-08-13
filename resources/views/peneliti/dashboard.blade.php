@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Simpel')
+@section('title', 'SIMPEL')
 
 @section('content')
 <div class="container">

@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Publikasi Jurnal')
+@section('title', 'SIMPEL - Edit Publikasi Jurnal')
 
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('bower_components/select2/dist/css/select2.css')}}">

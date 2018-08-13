@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Publikasi Jurnal')
+@section('title', 'SIMPEL - Publikasi Jurnal')
 @section('breadcrumb', 'Publikasi')
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('bower_components/select2/dist/css/select2.css')}}">
@@ -22,7 +22,7 @@
 						<form style="font-size: 18px" method="POST" action="{{url('/tambahpubjurnal')}}"> 
 							<div class="form-group">
 								<label for="exampleInputEmail1">Judul Artikel</label>
-								<input type="text" class="form-control" id="" name="judul">
+								<input type="text" class="form-control" id="" name="judul" required>
 							</div>
 							<div class="form-group">
 								<label for="tag_list">Penulis (berafiliasi dengan Trop BRC)</label>
@@ -41,7 +41,7 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Status Akreditasi</label>
-								<select class="form-control" name="status_akreditasi">
+								<select class="form-control" name="status_akreditasi" required>
 								  <option value="Terindeks database internasional(Web of Science, Scopus)">Terindeks database internasional(Web of Science, Scopus)</option>
 								  <option value="Terakreditasi Nasional A">Terakreditasi Nasional A</option>
 								  <option value="Terakreditasi Nasional B">Terakreditasi Nasional B</option>
@@ -50,12 +50,12 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail1">Nama Berkala</label>
-								<input type="text" class="form-control" id="" name="namaberkala">
+								<label for="exampleInputEmail1">Nama Jurnal Ilmiah</label>
+								<input type="text" class="form-control" id="" name="namaberkala" required>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Volume dan Halaman</label>
-								<input type="text" class="form-control" id="" name="volume">
+								<input type="text" class="form-control" id="" name="volume" required>
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">URL</label>
@@ -63,8 +63,8 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputEmail1">Tahun Terbit</label>
-								<input type="text" class="form-control" id="tahun" name="tahun" oninput="validasitahun()">
-								<span id="alerttahun" class="text-danger"></span>
+								<input type="text" class="form-control" id="tahun" name="tahun" oninput="validasitahun()" required>
+								<span id="alerttahun" style="color: red"></span>
 							</div>
 							<button id="submit" type="submit" class="btn btn-success btn-lg">Simpan</button>
 							{{csrf_field()}}
@@ -173,9 +173,11 @@
 	function validasitahun(){
 		if(document.getElementById("tahun").value!="" && document.getElementById("tahun").value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById("tahun").value!="" && document.getElementById("tahun").value == ""){
 			document.getElementById("alerttahun").innerHTML = "Isi dengan angka";
+			document.getElementById("submit").setAttribute("disabled","disabled");
 		}
 		else{
 			document.getElementById("alerttahun").innerHTML = "";
+			document.getElementById("submit").removeAttribute("disabled","disabled");
 		}
 	}
 </script>

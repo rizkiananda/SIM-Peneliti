@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'penggunaan dana')
+@section('title', 'SIMPEL - Form Penggunaan Dana')
 @section('styles')
 
 @endsection
@@ -58,7 +58,7 @@
 											<span id="alertnominal0" style="color: red"></span>
 										</td>
 										<td>
-											<input type="text" class="form-control" id="subtotal0" name="subtotal[]" readonly>
+											<input type="text" class="form-control uang" id="subtotal0" name="subtotal[]" readonly>
 										</td>
 										<td>
 											<button class="btn btn-danger" onclick="myDeleteFunction(this)"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -85,6 +85,16 @@
 	</div>
 </div>
 </div>
+@endsection
+
+@section('script')
+{{-- <script src="{{URL::asset('js/jquery.mask.js')}}"></script>
+ --}}{{-- <script type="text/javascript">
+    $(document).ready(function(){
+        	$(".form control uang").mask('00000,000,000,000,000.0000', {reverse: true});
+    	})
+</script> --}}
+
 <script type="text/javascript">
 	var t = $('#data_table').DataTable({
       'paging'      : false,
@@ -134,16 +144,19 @@
 		var nominal = 'nominal'
 		var alertnominal = 'alertnominal'
 		var subtotal = 'subtotal'
+		var subs = '#subtotal'
 
 		jumlah = jumlah + count
 		alertjumlah = alertjumlah + count
 		nominal = nominal + count
 		alertnominal = alertnominal + count
 		subtotal = subtotal + count
+		subs = subs + count
 
 
 		if(document.getElementById(jumlah).value!="" && document.getElementById(nominal).value!=""){
 			document.getElementById(subtotal).value=document.getElementById(jumlah).value*document.getElementById(nominal).value;
+			
 		}
 		else if(document.getElementById(jumlah).value==""){
 			document.getElementById(subtotal).value=document.getElementById(nominal).value;
@@ -153,7 +166,7 @@
 			document.getElementById(subtotal).value=document.getElementById(nominal).value;
 		}
 
-		if(document.getElementById(nominal).value!="" && document.getElementById(nominal).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById(nominal).value!="" && document.getElementById(nominal).value == ""){
+		if(document.getElementById(nominal).value!="" && document.getElementById(nominal).value.search(/[A-Za-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 || document.getElementById(nominal).value!="" && document.getElementById(nominal).value == ""){
 			document.getElementById(alertnominal).innerHTML = "Isi dengan angka";
 			document.getElementById(subtotal).value="";
 			document.getElementById("simpan").setAttribute("disabled","disabled");
@@ -162,7 +175,7 @@
 			document.getElementById(alertnominal).innerHTML = "";
 		}
 
-		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+		if(document.getElementById(jumlah).value!="" && document.getElementById(jumlah).value.search(/[A-Za-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
 			document.getElementById(alertjumlah).innerHTML = "Isi dengan angka";
 			document.getElementById(subtotal).value="";
 			document.getElementById("simpan").setAttribute("disabled","disabled");
@@ -171,6 +184,7 @@
 			document.getElementById(alertjumlah).innerHTML = "";
 		}
 
+		
 		// console.log(count);
 		let tables = document.getElementById("data_table");
 		let trlength = tables.rows.length - 2
@@ -190,16 +204,16 @@
 			nom = nom + i
 
 			if(document.getElementById(jmlh) != null && document.getElementById(nom) != null){
-				if(document.getElementById(jmlh).value!="" && document.getElementById(jmlh).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+				if(document.getElementById(jmlh).value!="" && document.getElementById(jmlh).value.search(/[A-Za-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
 					this.statusButton = false
-					console.log('before ', this.statusButton);
+				
 					break
 				}
 				else{
 					this.statusButton = true
 				}
 
-				if(document.getElementById(nom).value!="" && document.getElementById(nom).value.search(/[a-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
+				if(document.getElementById(nom).value!="" && document.getElementById(nom).value.search(/[A-Za-z ~ ` ! @ # $ % ^ & * ( ) _ - + = | \ / ' ' " " ; : ? > . < ,]/g) !== -1 ){
 					this.statusButton = false
 					break
 				}

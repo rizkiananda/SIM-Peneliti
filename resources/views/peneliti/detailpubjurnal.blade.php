@@ -1,5 +1,5 @@
 @extends('layout.peneliti')
-@section('title', 'Detail Publikasi Jurnal')
+@section('title', 'SIMPEL - Detail Publikasi Jurnal')
 @section('styles')
 <link rel="stylesheet" type="text/css" href="{{URL::asset('css/table.css')}}">
 @endsection
