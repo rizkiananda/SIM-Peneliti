@@ -21,7 +21,7 @@
 						<hr>
 						<form style="font-size: 18px" method="POST" action="{{url('/tambahpubjurnal')}}"> 
 							<div class="form-group">
-								<label for="exampleInputEmail1">Judul Artikel</label>
+								<label for="exampleInputEmail1">Judul Paper</label>
 								<input type="text" class="form-control" id="" name="judul" required>
 							</div>
 							<div class="form-group">
@@ -80,7 +80,13 @@
 						<img src="{{asset('img/contract.svg')}}" style="width: 50px;height: 50px">
 					</div>
 					<div>
-						<h3 style="color: #1c7bd9"><b>Tambah data jurnal yang telah terpublikasi</b></h3>
+						<h3 style="color: #1c7bd9"><b>Petujuk Pengisian</b></h3>
+						<hr>
+						<ul style="text-align: left;margin-left: -15px">
+							<li>Formulir <b><u>diisi lengkap</u></b> sesuai data publikasi jurnal </li>
+							<li>Penulis (berafiliasi dengan Trop BRC) merupakan fitur kolaborasi yang berguna untuk mengundang anggota tim kegiatan (peneliti dari Trop BRC) agar dapat ikut serta dalam mengisi data kegiatan yang sama</li>
+								<li>Penulis (tidak berafiliasi dengan Trop BRC) diisi jika terdapat anggota tim yang bukan merupakan peneliti dari Trop BRC. Jika pencarian tidak ditemukan dapat menambahkan data baru</li>
+						</ul>
 					</div>
 				</div>
 			</div>

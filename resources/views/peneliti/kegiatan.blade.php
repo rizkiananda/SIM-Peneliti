@@ -75,7 +75,8 @@
 									@if($tipekegiatan->dokumentasi == 'ya')
 										<div class="form-group">
 											<label for="">Foto Kegiatan</label>
-											<input type="file" name="foto">
+											<input type="file" name="foto" id="fileUpload" onchange="ValidateExtension(this)">
+											<span id="lblError" style="color: red"></span>
 										</div>
 										<div class="form-group">
 											<label for="">Keterangan Kegiatan</label>
@@ -125,9 +126,19 @@
 					</div>
 					<div>
 						@foreach($tipekegiatans as $tipekegiatan)
-								@if($id==$tipekegiatan->id)
-									<h3 style="color: #1c7bd9"><b>Tambah data kegiatan {{strtolower($tipekegiatan->nama_tipe_kegiatan)}}</b></h3>
-								@endif
+							@if($id==$tipekegiatan->id)
+								<h3 style="color: #1c7bd9"><b>Petujuk Pengisian</b></h3>
+								<hr>
+								<ul style="text-align: left;margin-left: -15px">
+									<li>Formulir diisi lengkap sesuai data  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} </li>
+									<li>Tanggal awal merupkan tanggal  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} dimulai dan tanggal akhir merupakan tanggal  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} berakhir</li>
+									<li>Tanggal diperlukan untuk keperluan pemantauan dan pengajuan penggunaan dana jika ada</li>
+									@if($tipekegiatan->dokumentasi == 'ya')
+									<li>Unggah foto {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} berformat .jpg/.jpeg/.png yang diikuti</li>
+									<li>Keterangan kegiatan merupakan <i>caption</i> dari gambar yang diunggah atau deskripsi singkat mengenai {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} yang diikuti</li>
+									@endif
+								</ul>
+							@endif
 						@endforeach
 					</div>
 				</div>
@@ -141,5 +152,21 @@
 	@if(Session::has('msg'))
 		swal("{{ Session::get('title')}}","{{ Session::get('msg')}}","{{ Session::get('alert-type')}}");
 	@endif
+
+	function ValidateExtension(obj) {
+        var allowedFiles = [".jpg",".jpeg",".png"];
+        var lblError = document.getElementById('lblError');
+        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
+        if (!regex.test(obj.value.toLowerCase()) && obj.value!="") {
+            lblError.innerHTML = "Silahkan masukkan format file: <b>" + allowedFiles.join(', ') + "</b>.";
+            document.getElementById("submit").setAttribute("disabled","disabled");
+            return false;
+        }
+        else{
+        	lblError.innerHTML = "";
+        	document.getElementById("submit").removeAttribute("disabled","disabled");
+        }
+    }
+        		
 </script>
 @endsection

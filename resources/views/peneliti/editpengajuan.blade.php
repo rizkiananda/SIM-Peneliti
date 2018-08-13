@@ -28,7 +28,12 @@
 							<a class="btn-top" style="margin-right: 15px;" href="{{url('/formDana/'.$id_kegiatan)}}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</a>
 							<h4 class="pull-right" style="color: #448aff"><b>Dana : Rp {{number_format($kegiatan_tp->kegiatan->saldo)}}</b></h4>
 						@else
+							<div class="alert alert-danger" role="alert">
+							  Tanggal kegiatan telah berakhir <i class="fas fa-exclamation-triangle"></i>
+							</div>
 							<button class="btn btn-primary" disabled> <span class="glyphicon glyphicon-plus"></span> Tambah Pengajuan</button>
+
+							
 						@endif
 						<br>
 						<br>

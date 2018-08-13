@@ -70,7 +70,13 @@
 						<img src="{{asset('img/contract.svg')}}" style="width: 50px;height: 50px">
 					</div>
 					<div>
-						<h3 style="color: #1c7bd9"><b>Tambah data buku yang telah terpublikasi</b></h3>
+						<h3 style="color: #1c7bd9"><b>Petujuk Pengisian</b></h3>
+						<hr>
+						<ul style="text-align: left;margin-left: -15px">
+							<li>Formulir <b><u>diisi lengkap</u></b> sesuai data publikasi buku </li>
+							<li>Penulis (berafiliasi dengan Trop BRC) merupakan fitur kolaborasi yang berguna untuk mengundang anggota tim kegiatan (peneliti dari Trop BRC) agar dapat ikut serta dalam mengisi data kegiatan yang sama</li>
+							<li>Penulis (tidak berafiliasi dengan Trop BRC) diisi jika terdapat anggota tim yang bukan merupakan peneliti dari Trop BRC. Jika pencarian tidak ditemukan dapat menambahkan data baru</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -84,7 +90,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Tambah Peneliti Non PSB</h4>
+            <h3 class="modal-title" id="myModalLabel" style="color: #ffffff;text-align: center"><b>Tambah Peneliti NonPSB</b>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fas fa-times"></i></span></button>
+	        </h3>
       </div>
       <div class="modal-body">
        	<form method="POST" action="{{url('/tambahNonPSB')}}">

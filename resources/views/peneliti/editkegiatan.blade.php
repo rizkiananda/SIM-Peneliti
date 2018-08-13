@@ -97,8 +97,18 @@
 					<div style="text-align: center">
 						<img src="{{asset('img/contract.svg')}}" style="width: 50px;height: 50px">
 					</div>
-					<div style="text-align: center">
-						<h3 style="color: #1c7bd9"><b>Ubah data yang diperlukan untuk kegiatan {{strtolower($tipekegiatan->nama_tipe_kegiatan)}}</b></h3>
+					<div>
+						<h3 style="color: #1c7bd9; text-align: center"><b>Petujuk Pengisian</b></h3>
+						<hr>
+						<ul style="text-align: left;margin-left: -15px">
+							<li>Formulir diisi lengkap sesuai data  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} yang diikuti</li>
+							<li>Tanggal awal merupkan tanggal  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} dimulai dan tanggal akhir merupakan tanggal  {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} berakhir</li>
+							<li>Tanggal diperlukan untuk keperluan pemantauan dan pengajuan penggunaan dana jika ada</li>
+							@if($tipekegiatan->dokumentasi == 'ya')
+							<li>Unggah foto {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} yang diikuti</li>
+							<li>Keterangan kegiatan merupakan <i>caption</i> dari gambar yang diunggah atau deskripsi singkat mengenai {{strtolower($tipekegiatan->nama_tipe_kegiatan)}} yang diikuti</li>
+							@endif
+						</ul>
 					</div>
 				</div>
 			</div>

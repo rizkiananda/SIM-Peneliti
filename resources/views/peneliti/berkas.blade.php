@@ -136,12 +136,18 @@
 			</div>
 			<div class="col-md-3 hidden-xs">
 				<div class="panel panel-default">
-					<div class="panel-body" style="text-align: center">
+					<div class="panel-body">
 						<div style="text-align: center">
 							<img src="{{asset('img/contract.svg')}}" style="width: 50px;height: 50px">
 						</div>
 						<div>
-							<h3 style="color: #1c7bd9"><b>Arsip berkas yang diperlukan untuk kegiatan {{strtolower($tipekegiatan->nama_tipe_kegiatan)}}</b></h3>
+							<h3 style="text-align: center; color: #1c7bd9"><b>Petunjuk Pengisian</b></h3>
+							<hr>
+							<ul style="text-align: left;margin-left: -15px">
+								<li>Penulis (berafiliasi dengan Trop BRC) merupakan fitur kolaborasi yang berguna untuk mengundang anggota tim kegiatan (peneliti dari Trop BRC) agar dapat ikut serta dalam mengisi data kegiatan yang sama</li>
+								<li>Penulis (tidak berafiliasi dengan Trop BRC) diisi jika terdapat anggota tim yang bukan merupakan peneliti dari Trop BRC</li>
+								<li>Berkas yang diunggah berformat .doc/.docx/.pdf</li>
+							</ul>
 						</div>
 					</div>
 				</div>
