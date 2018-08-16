@@ -17,6 +17,7 @@ use Auth;
 use PDF;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
+use Storage;
 
 class PDFController extends Controller
 {
@@ -91,4 +92,10 @@ class PDFController extends Controller
       $pdf=PDF::loadVIew('peneliti.cv',['penelitians'=>$penelitians, 'seminars'=>$seminars, 'peserta_pubjurnals'=>$peserta_pubjurnals, 'biodata'=>$biodata, 'publikasi_bukuu'=>$publikasi_bukuu, 'pendidikans'=>$pendidikans]);
       return $pdf->stream('cv.pdf');
     }
+
+    public function downloadUserGuide()
+    {
+        return Storage::download('public/user guide SIM Peneliti.pdf');
+    }
+
 }

@@ -43,8 +43,9 @@
                     </div>
             
                     <div class="login-button">
-                        <button type="submit" class="btn btn-default">Login</button>
-                    </div>
+                        <button type="submit" class="btns btn-default">Login</button>
+                    </div><br>
+                    <a href="{{url('/downloadUserGuide')}}" class="btn btn-default pull-right"><i class="fas fa-download"></i> Download User Guide</a>
                     </form>
                 </div>
             </div>  <!-- right-box -->

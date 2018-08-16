@@ -19,6 +19,9 @@ Route::get('/login', function () {
 		return view('auth.login');
 	});
 
+//User Guide
+Route::get('/downloadUserGuide', 'PDFController@downloadUserGuide');
+
 Auth::routes();
 
 Route::group(['middleware' => ['auth','revalidate']],function(){

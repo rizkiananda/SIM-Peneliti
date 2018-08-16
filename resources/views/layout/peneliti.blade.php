@@ -41,7 +41,8 @@
     </div>
 
     <footer class="main-footer">
-      <strong>Powered by Biofarmaka</strong>
+      <strong>Sistem Informasi Manajemen Peneliti</strong>
+      <strong class="pull-right">Pusat Studi Biofarmaka Tropika</strong>
     </footer>
   </div>
 

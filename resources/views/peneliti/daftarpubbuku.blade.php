@@ -11,7 +11,7 @@
 		<li><a href="/profil">Profil</a></li>
 		<li class="active">Daftar Publikasi Jurnal</li>
 	</ol>
-	<h2>Daftar Publikasi Jurnal</h2>
+	<h2>Daftar Publikasi Buku</h2>
 	<div class="box box-info" style="border: 1px solid #00c0ef; border-top: 5px solid #00c0ef;">
 		<div class="box-header with-border">
 			<div class="table-responsive">
